@@ -1,0 +1,27 @@
+
+
+{
+  "token":"MjU1NjMwNTQ1Mjk0MTk2NzM2.DKwE4w.uL7gM49qkxosAeZ15CTK3TyrdPE",
+  "dom4RootPath": "E:/Steam Library/steamapps/common/Dominions4/",
+  "dom4DataPath": "C:/Users/Jacob/AppData/Roaming/Dominions4/",
+  "dom5RootPath": "E:/Steam Library/steamapps/common/Dominions5/",
+  "dom5DataPath": "C:/Users/Jacob/AppData/Roaming/Dominions5/",
+  "coe4RootPath": "E:/Steam Library/steamapps/common/ConquestOfElysium4/",
+  "coe4DataPath": "C:/Users/Jacob/AppData/Roaming/coe4/",
+  "pcUser": "Jacob",
+  "myGuildID": "253548414162173952",
+  "ownerID": "212328740233936896",
+  "botID": "255630545294196736",
+  "botRoleID": "253599062991831040",
+  "adminID": "253550883156000768",
+  "modID": "260420633823805440",
+  "prophetID": "260420462817837056",
+  "celestialClockmakerID": "253551130712342528",
+  "gmID": "342841000550727680",
+  "blitzerID": "351874592211599360",
+  "houndsID": "263002098055118848",
+
+  "prefixes": ["Everloving", "Ghoulish", "Bony", "Death", "Fiery", "Peaceful", "Humongous", "Colossal", "Frosty", "Unexpected", "W9N9B9S9", "Despairing", "Pointless", "Gentle", "Clockwork", "Random", "Endless"],
+
+  "suffixes": ["Deathmatch", "Struggle", "Battle", "Blitz", "Match", "Game", "Tragedy", "Quest", "Journey", "Chore", "Battlefield", "Hound", "Monster", "Beast", "Disaster", "Catastrophe", "Hecatombe"]
+}

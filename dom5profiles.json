@@ -1,0 +1,19 @@
+
+{
+  "mapfile": "random 15",
+  "mods": "WH_6.0.dm",
+  "research": 1,
+  "startingresearch": "random",
+  "hofsize": 15,
+  "indepstr": 5,
+  "magicsites": 50,
+  "thrones": "3, 2, 1, 5",
+  "cataclysm": "off",
+  "eventrarity": 1,
+  "storyevents": "minor",
+  "globalslots": 5,
+  "scoregraphs": "off",
+  "masterpassword": "",
+  "aiplayers": "none",
+  "defaulttimer": "0"
+}
