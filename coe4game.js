@@ -456,21 +456,16 @@ function announceTurn(t = this)
 function deleteSave(cb, t = this)
 {
   var files = fs.readdirSync("games/" + t.name, "utf8");
-  var name = t.name;
-
-  for (var i = 0; i < files.length; i++)
+  
+  kill(function()
   {
-    fs.unlinkSync("games/" + t.name + "/" + files[i]);
-  }
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync("games/" + t.name + "/" + files[i]);
+    }
 
-  fs.rmdir("games/" + t.name);
-  t.instance.kill("SIGKILL");
-
-  setTimeout(function ()
-  {
-    cb();
-    rw.log(name + ": deleted the game instance and save files.");
-  }, 1000);
+    fs.rmdirSync("games/" + t.name);
+  }, t);
 }
 
 function getLogInfo(cb, t = this)
