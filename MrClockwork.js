@@ -1084,6 +1084,11 @@ event.e.on("hour", () =>
 
 	for (var key in games)
 	{
+		if (games[key].game === "CoE4")
+		{
+			continue;
+		}
+
 		if (games[key].wasStarted === false && games[key].channel == null && games[key].role == null && games[key].currenttimer != null && games[key].currenttimer.turn === 0 && Date.now() - games[key].firstHosted > 3600000)
 		{
 			rw.log("More than an hour has passed and " + games[key].name + " has not started, neither does it have a channel. Cleaning it up.");

@@ -311,10 +311,33 @@ function untrack(t = this)
   t.role = null;
 }
 
-function kill(t = this)
+function kill(cb = null, t = this)
 {
-  //Kill and relaunch the dom4 instance with the full default timer
-	t.instance.kill("SIGKILL");
+  //Kill and relaunch the dom5 instance with the full default timer
+  if (t.instance != null)
+  {
+    t.instance.kill("SIGKILL");
+
+    if (cb != null)
+    {
+      setTimeout(triggerCallback , 600);
+    }
+  }
+
+  else if (cb != null)
+  {
+    cb();
+  }
+
+  function triggerCallback()
+  {
+    if (t.instance == null)
+    {
+      cb();
+    }
+
+    else setTimeout(triggerCallback, 600);
+  }
 }
 
 function lastHostTime(t = this)
@@ -456,21 +479,16 @@ function announceTurn(t = this)
 function deleteSave(cb, t = this)
 {
   var files = fs.readdirSync("games/" + t.name, "utf8");
-  var name = t.name;
 
-  for (var i = 0; i < files.length; i++)
+  kill(function()
   {
-    fs.unlinkSync("games/" + t.name + "/" + files[i]);
-  }
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync("games/" + t.name + "/" + files[i]);
+    }
 
-  fs.rmdir("games/" + t.name);
-  t.instance.kill("SIGKILL");
-
-  setTimeout(function ()
-  {
-    cb();
-    rw.log(name + ": deleted the game instance and save files.");
-  }, 1000);
+    fs.rmdirSync("games/" + t.name);
+  }, t);
 }
 
 function getLogInfo(cb, t = this)
