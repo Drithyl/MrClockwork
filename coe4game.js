@@ -479,11 +479,7 @@ function announceTurn(t = this)
 function deleteSave(cb, t = this)
 {
   var files = fs.readdirSync("games/" + t.name, "utf8");
-<<<<<<< HEAD
-
-=======
   
->>>>>>> 0a4181fc8e9966ca77665395989e8cd5da40b652
   kill(function()
   {
     for (var i = 0; i < files.length; i++)
