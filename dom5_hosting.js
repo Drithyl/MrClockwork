@@ -236,6 +236,7 @@ function validateMapfile(mapfile, username)
     }
 
     result.success = true;
+    result.data = mapfile.toLowerCase();
   	return result;
   }
 
@@ -254,6 +255,7 @@ function validateMapfile(mapfile, username)
   }
 
   result.success = true;
+  result.data = mapfile.toLowerCase();
   return result;
 }
 
