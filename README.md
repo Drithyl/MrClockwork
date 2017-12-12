@@ -1,4 +1,4 @@
-# Mr.-Clockwork
+# MrClockwork
 The bot that is used in the Discord group Clockwork Hounds to host and support Dominions 4 and 5 games (and hopefully Conquest of Elysium 4 games soon).
 
 "games" and "backups" are the folders where the bot stores the information of saved games and their backups. To be clear, this is not the Dominions of CoE save files, just json data of the timers, turns, settings, etc.
