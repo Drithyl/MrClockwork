@@ -330,7 +330,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
   var spawn = require('child_process').spawn;
   var args;
 
-  args = settingsToExeArguments(t).concat(t.defaulttimer.toExeArguments(), extraArgs);
+  args = settingsToExeArguments(t).concat(t.currenttimer.toExeArguments(), extraArgs);
 
   if (t.instance)
   {
