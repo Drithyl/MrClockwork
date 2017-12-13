@@ -497,8 +497,6 @@ function createChannel(message, t = this)
 function untrack(t = this)
 {
   t.tracked = false;
-  t.channel = null;
-  t.role = null;
 }
 
 function kill(cb = null, t = this)
