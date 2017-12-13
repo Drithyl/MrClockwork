@@ -810,7 +810,7 @@ function updateTurnInfo(info, t = this)
   {
     sendReminders(newTimerInfo.getTotalHours(), t);
 
-    if (newTimerInfo.getTotalMinutes() <= 60 && newTimerInfo.getTotalSeconds() != 0)
+    if (newTimerInfo.getTotalHours() <= 0 && newTimerInfo.getTotalSeconds() != 0)
     {
       announceNearTurn(newTimerInfo, t);
     }
