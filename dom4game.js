@@ -163,7 +163,7 @@ function printInfo(t = this)
 
 function settingsToExeArguments(t = this)
 {
-  var args = [t.name, "--window", "--tcpserver", "--port", t.port, "--statuspage", "games/" + t.name + "/status", "--noclientstart", "--renaming"];
+  var args = [t.name, "--window", "--tcpserver", "--port", t.port, "--statuspage", "games/" + t.name + "/status", "--noclientstart", "--renaming", "--textonly"];
 
   if (Array.isArray(t.mods) && t.mods.length)
   {
