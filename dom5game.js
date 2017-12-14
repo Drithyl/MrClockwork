@@ -646,7 +646,7 @@ function sendReminders(hoursLeft, t = this)
       continue;
     }
 
-    member.send("This is an automated reminder to do your turn in the game " + t.name + ". There are " + hoursLeft + " for the turn to roll. If you have already done your turn, you can safely ignore this (or double check that your turn went through just in case!).");
+    member.send("This is an automated reminder to do your turn in the game " + t.name + ". There are " + hoursLeft + " hours left for the turn to roll. If you have already done your turn, you can safely ignore this (or double check that your turn went through just in case!).");
   }
 }
 
