@@ -194,12 +194,6 @@ function settingsToExeArguments(t = this)
 {
   var args = [t.name, "--nosound", "--textonly", "--window", "--tcpserver", "--port", t.port, "--statuspage", "games/" + t.name + "/status", "--noclientstart", "--renaming", "--statusdump"];
 
-  if (t.name.toLowerCase() == "deer_wrestlers_anonymous")
-  {
-    console.log("SET WRESTLERS WITH DEBUG LOG");
-    args.push("-ddd");
-  }
-
   if (t.mapfile.includes(".map") == false)
   {
     args.push("--randmap", t.mapfile.replace(/\D+/g, ""), "--vwrap");
