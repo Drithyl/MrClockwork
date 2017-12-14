@@ -249,8 +249,15 @@ bot.on('message', message =>
 	else if (/\%MODS DOM4/i.test(input))
 	{
 		var msg = "";
+		var path = config.dom4DataPath + "mods";
 
-		fs.readdir(config.dom4DataPath + "mods", "utf8", (err, files) =>
+		if (fs.existsSync(path) === false)
+		{
+			message.author.send("An error occurred. No mods directory was found on the server.");
+			return;
+		}
+
+		fs.readdir(path, "utf8", (err, files) =>
 		{
 			if (err)
 			{
@@ -277,8 +284,15 @@ bot.on('message', message =>
 	else if (/\%MODS DOM5/i.test(input))
 	{
 		var msg = "";
+		var path = config.dom5DataPath + "mods";
 
-		fs.readdir(config.dom5DataPath + "mods", "utf8", (err, files) =>
+		if (fs.existsSync(path) === false)
+		{
+			message.author.send("An error occurred. No mods directory was found on the server.");
+			return;
+		}
+
+		fs.readdir(path, "utf8", (err, files) =>
 		{
 			if (err)
 			{
@@ -306,8 +320,15 @@ bot.on('message', message =>
 	{
 		var msg = "";
 		var provCount;
+		var path = config.dom4DataPath + "maps";
 
-		fs.readdir(config.dom4DataPath + "maps", "utf8", (err, files) =>
+		if (fs.existsSync(path) === false)
+		{
+			message.author.send("An error occurred. No maps directory was found on the server.");
+			return;
+		}
+
+		fs.readdir(path, "utf8", (err, files) =>
 		{
 			if (err)
 			{
@@ -336,8 +357,15 @@ bot.on('message', message =>
 	{
 		var msg = "";
 		var provCount;
+		var path = config.dom5DataPath + "maps";
 
-		fs.readdir(config.dom5DataPath + "maps", "utf8", (err, files) =>
+		if (fs.existsSync(path) === false)
+		{
+			message.author.send("An error occurred. No maps directory was found on the server.");
+			return;
+		}
+
+		fs.readdir(path, "utf8", (err, files) =>
 		{
 			if (err)
 			{
@@ -390,15 +418,14 @@ bot.on('message', message =>
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 
-		if (message.channel.type != "text" || message.channel.name.includes("_game") == false)
+		if (message.channel.name.includes("_game") === false)
 		{
-			message.reply("You can only use the !timer command from within one of the Dominions 4 game's channels.");
-			return;
+			gameKey = input.replace(/%TIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
 		}
 
 		if (games[gameKey] == null)
 		{
-			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
+			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling.");
 			return;
 		}
 
@@ -439,20 +466,19 @@ bot.on('message', message =>
 		});
 	}
 
-	else if (/\%TIMER\s*\d+/i.test(input) && message.channel.type != "dm")
+	else if (/\%TIMER\s*\w*\s*\d+\s*\w*/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var newTimer = timer.createFromInput(input.replace(/\%timer/i, ""));
 
-		if (message.channel.type != "text" || message.channel.name.includes("_game") == false)
+		if (message.channel.name.includes("_game") === false)
 		{
-			message.reply ("You can only use the !timer command from within one of the Dominions 4 game's channels.");
-			return;
+			gameKey = input.replace(/%TIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
 		}
 
 		if (games[gameKey] == null)
 		{
-			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
+			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling.");
 			return;
 		}
 
@@ -491,30 +517,29 @@ bot.on('message', message =>
 		if (newTimer.isPaused == true)
 		{
 			rw.log(message.author.username + " paused the timer: " + input);
-			message.reply(games[gameKey].role + " The timer has been paused. This might take a few seconds to update ingame.");
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
 		}
 
 		else
 		{
 			rw.log(username + " requested a timer change: " + input);
-			message.reply(games[gameKey].role + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
 		}
 	}
 
-	else if (/\%DTIMER\s*\d+/i.test(input) && message.channel.type != "dm")
+	else if (/\%DTIMER\s*\w*\s*\d+\s*\w*/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var newTimer = timer.createFromInput(input.replace(/\%dtimer/i, ""));
 
-		if (message.channel.type != "text" || message.channel.name.includes("_game") == false)
+		if (message.channel.name.includes("_game") === false)
 		{
-			message.reply ("You can only use the !dtimer command from within one of the Dominions 4 game's channels.");
-			return;
+			gameKey = input.replace(/%DTIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
 		}
 
 		if (games[gameKey] == null)
 		{
-			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
+			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling.");
 			return;
 		}
 
@@ -541,24 +566,50 @@ bot.on('message', message =>
 		if (newTimer.isPaused == true)
 		{
 			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
-			message.reply(games[gameKey].role + " set the default timer to zero (unlimited turn times).");
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
 		}
 
 		else
 		{
 			rw.log(username + " requested a default timer change: " + input);
-			message.reply(games[gameKey].role + " The default timer has been set to " + newTimer.print() + ".");
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
 		}
 	}
 
-	else if (/^\%ADD ROLE/i.test(input))
+	else if (/^\%ADD ROLE/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var membersMap = message.mentions.members;
+		var rolesMap = message.mentions.roles;
 
-		if (message.channel.type != "text" || message.channel.name.includes("_game") == false)
+		if (message.channel.name.includes("_game") === false)
 		{
-			message.reply ("You can only use the !dtimer command from within one of the Dominions 4 game's channels.");
+			if (rolesMap.size <= 0)
+			{
+				message.reply("You did not mention any role to add to yourself. Use @ to mention any amount of roles you want to give yourself.");
+				return;
+			}
+
+			for (var [k, v] of rolesMap)
+			{
+				//only works if the member's highest role is higher than the other roles he tries to give himself.
+				if (v.name.toLowerCase().includes(" player") === true)
+				{
+					message.reply("Only the game's organizer or an Admin, Pretender or GM can give the role " + v.name + " to you.");
+				}
+
+				else if (member.highestRole.comparePositionTo(v) > 0)
+				{
+					member.addRole(v);
+					message.reply("The role " + v.name + " was added.");
+				}
+
+				else
+				{
+					message.reply("You do not have permissions to add the role " + v.name + " to yourself. You can only add roles lower than yours.");
+				}
+			}
+
 			return;
 		}
 
@@ -594,14 +645,26 @@ bot.on('message', message =>
 		message.reply("The roles were added.");
 	}
 
-	else if (/^\%REMOVE ROLE/i.test(input))
+	else if (/^\%REMOVE ROLE/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var membersMap = message.mentions.members;
+		var rolesMap = message.mentions.roles;
 
-		if (message.channel.type != "text" || message.channel.name.includes("_game") == false)
+		if (message.channel.name.includes("_game") === false)
 		{
-			message.reply ("You can only use the !dtimer command from within one of the Dominions 4 game's channels.");
+			if (rolesMap.size <= 0)
+			{
+				message.reply("You did not mention any role to remove from yourself. Use @ to mention any amount of roles you want to remove from yourself.");
+				return;
+			}
+
+			for (var [k, v] of rolesMap)
+			{
+				member.removeRole(v);
+				message.reply("The role " + v.name + " was removed.");
+			}
+
 			return;
 		}
 
@@ -1134,6 +1197,16 @@ function checkPermissions(id, member, game)
 	else return false;
 }
 
+function mentionRole(role)
+{
+	if (role == null)
+	{
+		return "";
+	}
+
+	else return role;
+}
+
 function backup()
 {
 	for (inst in games)
@@ -1152,8 +1225,17 @@ function backup()
 
 function initialize()
 {
-	var files = fs.readdirSync("games", "utf8");
+	var files;
 	var subFiles;
+	var path = "games";
+
+	if (fs.existsSync(path) === false)
+	{
+		rw.log("An error occurred when initializing the games. No games directory was found. Could not complete initialization.");
+		return;
+	}
+
+	files = fs.readdirSync(path, "utf8");
 
 	if (files == null)
 	{

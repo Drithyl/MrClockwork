@@ -284,6 +284,13 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
 {
   var spawn = require('child_process').spawn;
   var args = settingsToExeArguments(t).concat(timer.toExeArguments(), extraArgs);
+  var path = config.dom4RootPath + "Dominions4.exe";
+
+  if (fs.existsSync(path) === false)
+  {
+    rw.log("The Dominions4.exe path does not seem correct! Could not host game!");
+    return;
+  }
 
   if (t.instance)
   {
@@ -291,7 +298,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
     return;
   }
 
-	t.instance = spawn(config.dom4RootPath + "Dominions4.exe", args);
+	t.instance = spawn(path, args);
 
   //If the window is closed manually
 	t.instance.on('close', (code, signal) =>
@@ -710,38 +717,63 @@ function announceTurn(newTimerInfo, t = this)
 
 function deleteSave(t = this)
 {
-  var files = fs.readdirSync("games/" + t.name, "utf8");
+  var files;
+  var path = "games/" + t.name;
 
-  if (t.instance != null)
+	if (fs.existsSync(path) === false)
+	{
+		files = null;
+	}
+
+  else files = fs.readdirSync(path, "utf8");
+
+  kill(function()
   {
-    kill(null, t);
-  }
+    if (files == null)
+    {
+      rw.log("The files for game " + t.name + " don't exist, no need to delete them.");
+      return;
+    }
 
-  for (var i = 0; i < files.length; i++)
-  {
-    fs.unlinkSync("games/" + t.name + "/" + files[i]);
-  }
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync(path + "/" + files[i]);
+    }
 
-  fs.rmdirSync("games/" + t.name);
+    fs.rmdirSync(path);
+  }, t);
 }
 
 function deleteDomSave(t = this)
 {
-  var files = fs.readdirSync(config.dom4DataPath + "savedgames/" + t.name, "utf8");
+  var files;
   var name = t.name;
+  var path = config.dom4DataPath + "savedgames/" + name;
 
-  if (t.instance != null)
+	if (fs.existsSync(path) === false)
+	{
+		files = null;
+	}
+
+  else files = fs.readdirSync(path, "utf8");
+
+  kill(function()
   {
-    kill(null, t);
-  }
+    if (files == null)
+    {
+      rw.log("The dominions 4 save files for game " + name + " don't exist, no need to delete them.");
+      return;
+    }
 
-  for (var i = 0; i < files.length; i++)
-  {
-    fs.unlinkSync(config.dom4DataPath + "savedgames/" + t.name + "/" + files[i]);
-  }
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync(path + "/" + files[i]);
+    }
 
-  fs.rmdirSync(config.dom4DataPath + "savedgames/" + t.name);
-  rw.log(name + ": deleted the dom save files.");
+    fs.rmdirSync(path);
+    rw.log(name + ": deleted the dom save files.");
+
+  }, t);
 }
 
 function getTurnInfo(cb, t = this)

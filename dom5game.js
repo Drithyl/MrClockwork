@@ -194,6 +194,12 @@ function settingsToExeArguments(t = this)
 {
   var args = [t.name, "--nosound", "--textonly", "--window", "--tcpserver", "--port", t.port, "--statuspage", "games/" + t.name + "/status", "--noclientstart", "--renaming", "--statusdump"];
 
+  if (t.name.toLowerCase() == "deer_wrestlers_anonymous")
+  {
+    console.log("SET WRESTLERS WITH DEBUG LOG");
+    args.push("-ddd");
+  }
+
   if (t.mapfile.includes(".map") == false)
   {
     args.push("--randmap", t.mapfile.replace(/\D+/g, ""), "--vwrap");
@@ -328,14 +334,33 @@ function start(t = this)
 function host(timer = this.currenttimer, extraArgs = [], t = this)
 {
   var spawn = require('child_process').spawn;
-  var args;
+  var args = settingsToExeArguments(t).concat(extraArgs);
+  var path = config.dom5RootPath + "Dominions5.exe";
+
+  if (fs.existsSync(path) === false)
+  {
+    rw.log("The Dominions5.exe path does not seem correct! Could not host game!");
+    return;
+  }
 
   if (t.currenttimer == null)
   {
-    args = settingsToExeArguments(t).concat(t.defaulttimer.toExeArguments(), extraArgs);
+    if (t.defaulttimer.isPaused === true)
+    {
+      //random number of hours, will get changed below anyway. This is for blitzes to work with timers
+      args.push("--hours", 3);
+    }
+
+    else args = args.concat(t.defaulttimer.toExeArguments());
   }
 
-  else args = settingsToExeArguments(t).concat(t.currenttimer.toExeArguments(), extraArgs);
+  else if (t.currenttimer.isPaused === true)
+  {
+    //random number of hours, will get changed below anyway. This is for blitzes to work with timers
+    args.push("--hours", 3);
+  }
+
+  else args = args.concat(t.currenttimer.toExeArguments());
 
   if (t.instance)
   {
@@ -343,7 +368,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
     return;
   }
 
-	t.instance = spawn(config.dom5RootPath + "Dominions5.exe", args);
+	t.instance = spawn(path, args);
 
   if (t.wasStarted === true)
   {
@@ -888,32 +913,60 @@ function announceNearTurn(newTimerInfo, t = this)
 
 function deleteSave(t = this)
 {
-  var files = fs.readdirSync("games/" + t.name, "utf8");
+  var files;
+  var path = "games/" + t.name;
+
+	if (fs.existsSync(path) === false)
+	{
+		files = null;
+	}
+
+  else files = fs.readdirSync(path, "utf8");
 
   kill(function()
   {
-    for (var i = 0; i < files.length; i++)
+    if (files == null)
     {
-      fs.unlinkSync("games/" + t.name + "/" + files[i]);
+      rw.log("The files for game " + t.name + " don't exist, no need to delete them.");
+      return;
     }
 
-    fs.rmdirSync("games/" + t.name);
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync(path + "/" + files[i]);
+    }
+
+    fs.rmdirSync(path);
   }, t);
 }
 
 function deleteDomSave(t = this)
 {
-  var files = fs.readdirSync(config.dom5DataPath + "savedgames/" + t.name, "utf8");
+  var files;
   var name = t.name;
+  var path = config.dom5DataPath + "savedgames/" + name;
+
+	if (fs.existsSync(path) === false)
+	{
+		files = null;
+	}
+
+  else files = fs.readdirSync(path, "utf8");
 
   kill(function()
   {
-    for (var i = 0; i < files.length; i++)
+    if (files == null)
     {
-      fs.unlinkSync(config.dom5DataPath + "savedgames/" + t.name + "/" + files[i]);
+      rw.log("The dominions 5 save files for game " + name + " don't exist, no need to delete them.");
+      return;
     }
 
-    fs.rmdirSync(config.dom5DataPath + "savedgames/" + t.name);
+    for (var i = 0; i < files.length; i++)
+    {
+      fs.unlinkSync(path + "/" + files[i]);
+    }
+
+    fs.rmdirSync(path);
     rw.log(name + ": deleted the dom save files.");
 
   }, t);
@@ -963,16 +1016,19 @@ function save(t = this)
 
 function parseDump(t = this)
 {
-  var dump = fs.readFileSync(config.dom5DataPath + "savedgames/" + t.name + "/statusdump.txt", "utf-8");
+  var dump;
   var lines;
   var lineNumbers = "";
   var dumpObj = {};
+  var path = config.dom5DataPath + "savedgames/" + t.name + "/statusdump.txt";
 
-  if (dump == null)
-  {
-    rw.log("An error occurred when retrieving the dump data of " + t.name);
+	if (fs.existsSync(path) === false)
+	{
+    rw.log("Could not find the path of the dump data of " + t.name);
     return null;
-  }
+	}
+
+  dump = fs.readFileSync(path, "utf-8");
 
   lines = dump.split("\n");
 
