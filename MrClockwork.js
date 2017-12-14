@@ -580,18 +580,25 @@ bot.on('message', message =>
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var membersMap = message.mentions.members;
-		var rolesMap = message.mentions.roles;
+		var rolesMap = myGuild.roles;
 
 		if (message.channel.name.includes("_game") === false)
 		{
+			var roles = input.replace(/%ADD ROLE/i, "").trim().toLowerCase();
+
 			if (rolesMap.size <= 0)
 			{
-				message.reply("You did not mention any role to add to yourself. Use @ to mention any amount of roles you want to give yourself.");
+				message.reply("No role is available in the guild.");
 				return;
 			}
 
 			for (var [k, v] of rolesMap)
 			{
+				if (roles.includes(v.name.toLowerCase()) === false)
+				{
+					continue;
+				}
+
 				//only works if the member's highest role is higher than the other roles he tries to give himself.
 				if (v.name.toLowerCase().includes(" player") === true)
 				{
@@ -649,18 +656,26 @@ bot.on('message', message =>
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 		var membersMap = message.mentions.members;
-		var rolesMap = message.mentions.roles;
+		var rolesMap = member.roles;
 
 		if (message.channel.name.includes("_game") === false)
 		{
+			var roles = input.replace(/%REMOVE ROLE/i, "").trim().toLowerCase();
+
 			if (rolesMap.size <= 0)
 			{
-				message.reply("You did not mention any role to remove from yourself. Use @ to mention any amount of roles you want to remove from yourself.");
+				message.reply("You do not have any role.");
 				return;
 			}
 
 			for (var [k, v] of rolesMap)
 			{
+				if (roles.includes(v.name.toLowerCase()) === false)
+				{
+					continue;
+				}
+
+
 				member.removeRole(v);
 				message.reply("The role " + v.name + " was removed.");
 			}
