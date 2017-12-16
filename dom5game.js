@@ -71,7 +71,7 @@ module.exports =
       "untrack": untrack,
       "kill": kill,
       "changeCurrentTimer": changeCurrentTimer,
-      "changeGlobalTimer": changeGlobalTimer,
+      "changeDefaultTimer": changeDefaultTimer,
       "addReminder": addReminder,
       "stopReminder": stopReminder,
       "printReminders": printReminders,
@@ -559,7 +559,7 @@ function changeCurrentTimer(timer, t = this)
   });
 }
 
-function changeGlobalTimer(timer, t = this)
+function changeDefaultTimer(timer, t = this)
 {
   var data = "setinterval " + timer.getTotalMinutes() + "\nsettimeleft " + t.currenttimer.getTotalSeconds();
 

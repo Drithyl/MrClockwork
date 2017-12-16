@@ -561,7 +561,7 @@ bot.on('message', message =>
 			return;
 		}
 
-		games[gameKey].changeGlobalTimer(newTimer);
+		games[gameKey].changeDefaultTimer(newTimer);
 
 		if (newTimer.isPaused == true)
 		{
