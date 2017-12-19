@@ -345,7 +345,10 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
       args.push("--hours", 3);
     }
 
-    else args = args.concat(t.defaulttimer.toExeArguments());
+    else
+    {
+      args = args.concat(t.defaulttimer.toExeArguments());
+    }
   }
 
   else if (t.currenttimer.isPaused === true)
@@ -354,7 +357,10 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
     args.push("--hours", 3);
   }
 
-  else args = args.concat(t.currenttimer.toExeArguments());
+  else
+  {
+    args = args.concat(t.currenttimer.toExeArguments());
+  }
 
   if (t.instance)
   {
@@ -366,7 +372,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
 
   if (t.wasStarted === true)
   {
-    rw.log(t.name + ": Timer changed through hack.");
+    rw.log(t.name + ": Timer changed through hack: " + timer.print());
     changeCurrentTimer(timer, t);
   }
 

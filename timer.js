@@ -12,7 +12,7 @@ module.exports =
       hours: 0,
       minutes: 0,
       seconds: 0,
-      isPaused: false,
+      isPaused: true,
 
       getTotalHours: function()
       {
@@ -91,7 +91,8 @@ module.exports =
 
         else
         {
-          rw.log("This timer has 0 hours, minutes and seconds, but is also not paused. Something's wrong.");
+          rw.log("This timer probably has 0 hours, minutes and seconds, but is also not paused. Something's wrong: ");
+          console.log(this);
           return [""];
         }
       }
@@ -110,6 +111,11 @@ module.exports =
       {
         timer[key] = objJSON[key];
       }
+    }
+
+    if (timer.getTotalSeconds() > 0)
+    {
+      timer.isPaused = false;
     }
 
     return timer;
