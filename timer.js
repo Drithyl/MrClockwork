@@ -67,15 +67,34 @@ module.exports =
       {
         var hours = this.getTotalHours();
         var minutes = this.getTotalMinutes();
+        var seconds = this.getTotalSeconds();
 
-        if (hours <= 0)
+        if (this.isPaused === true)
+        {
+          return [""];
+        }
+
+        if (hours <= 0 && minutes <= 0 && seconds > 0)
+        {
+          return ["--minutes", "1"];
+        }
+
+        else if (hours <= 0 && minutes > 0)
         {
           return ["--minutes", minutes.toString()];
         }
 
-        else return ["--hours", (hours + 1).toString()];
-      }
+        else if (hours > 0)
+        {
+          return ["--hours", (hours + 1).toString()];
+        }
 
+        else
+        {
+          rw.log("This timer has 0 hours, minutes and seconds, but is also not paused. Something's wrong.");
+          return [""];
+        }
+      }
     };
 
     return obj;
