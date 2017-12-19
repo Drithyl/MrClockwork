@@ -189,6 +189,8 @@ module.exports =
       timer.isPaused = true;
     }
 
+    else timer.isPaused = false;
+
   	return timer;
   },
 
@@ -242,6 +244,8 @@ module.exports =
     {
       timer.isPaused = true;
     }
+
+    else timer.isPaused = false;
 
     return timer;
   },
