@@ -368,13 +368,23 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
     return;
   }
 
-	t.instance = spawn(path, args);
+	t.instance = spawn(path, args, {stdio: 'ignore'});
 
   if (t.wasStarted === true)
   {
     rw.log(t.name + ": Timer changed through hack: " + timer.print());
     changeCurrentTimer(timer, t);
   }
+
+  /*t.instance.stdout.on('data', (data) =>
+  {
+    rw.log(`stdout: ${data}`);
+  });
+
+  t.instance.stderr.on('data', (data) =>
+  {
+    rw.log(`stderr: ${data}`);
+  });*/
 
   //If the window is closed manually
 	t.instance.on('close', (code, signal) =>

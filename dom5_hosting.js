@@ -104,6 +104,7 @@ module.exports =
 			else
 			{
         this.instances[username].currKey = this.instances[username].keys.shift();
+        rw.log("Sending next cue: " + settings.cues[this.instances[username].currKey]);
 				return settings.cues[this.instances[username].currKey];
 			}
 		}
