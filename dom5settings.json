@@ -41,6 +41,6 @@
     "scoregraphs": "**Scoregraphs:** 'on', 'off', or 'disabled' (will remove any information on other nations, even through sites) (our default is off).",
     "masterpassword": "**Master password:** must not contain spaces or special characters other than underscores.",
     "aiplayers": "**AI nations:** 'none' for no AI. Separate each nation with a comma (,). The format is the following: 'nation number' 'difficulty', 'nation number' 'difficulty', etc. The difficulties are easy, normal, difficult, mighty, master, and impossible. Type `%nations dom5` to get the list of nations and their codes. An example would be: `82 impossible, 50 master, 45 difficult`.",
-    "defaulttimer": "**Turn timer:** Use the following format: 1d12h30m, where d are the days, h the hours and m the minutes. If you type only an integer, like '32', it will be interpreted as hours. Beware: you cannot change the timer for a blitz."
+    "defaulttimer": "**Turn timer:** Use the following format: 1d12h30m, where d are the days, h the hours and m the minutes. If you type only an integer, like '32', it will be interpreted as hours."
   }
 }
