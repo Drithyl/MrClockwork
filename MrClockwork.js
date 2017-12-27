@@ -1380,7 +1380,7 @@ bot.on("disconnect", () =>
 {
 	didNotReconnect = true;
 	rw.log("I have been disconnected!");
-	setTimeout (reconnect.bind(null, token), reconnectInterval);
+	setTimeout (reconnect.bind(null, config.token), reconnectInterval);
 
 	if (owner)
 	{
