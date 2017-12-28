@@ -579,7 +579,7 @@ function changeDefaultTimer(timer, t = this)
 {
   var data = "setinterval " + timer.getTotalMinutes() + "\nsettimeleft " + t.currenttimer.getTotalSeconds();
 
-  rw.domcmd("settimeleft " + timer.getTotalSeconds(), t, function()
+  rw.domcmd(data, t, function()
   {
     t.defaulttimer = Object.assign(timer);
   });
