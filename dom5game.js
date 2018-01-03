@@ -342,7 +342,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
     if (t.defaulttimer.isPaused === true)
     {
       //random number of hours, will get changed below anyway. This is for blitzes to work with timers
-      args.push("--hours", 3);
+      args.push("--hours", 0);
     }
 
     else
@@ -354,7 +354,7 @@ function host(timer = this.currenttimer, extraArgs = [], t = this)
   else if (t.currenttimer.isPaused === true)
   {
     //random number of hours, will get changed below anyway. This is for blitzes to work with timers
-    args.push("--hours", 3);
+    args.push("--hours", 0);
   }
 
   else
