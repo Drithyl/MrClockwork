@@ -116,7 +116,7 @@ bot.on("ready", () =>
 		rw.log("Something went wrong; cannot find the Blitzer role object in this guild.");
 	}
 
-	owner.send("I am ready!");
+	owner.send("I am ready!").catch((err) => {rw.log(err);});
 
 	if (wasInitialized == false)
 	{
@@ -156,7 +156,7 @@ bot.on('message', message =>
 		catch (err)
 		{
 			rw.log("An error occurred when trying to roll " + input + ":\n\n\n" + err);
-			message.channel.send("Ooops, something went wrong in the code here.");
+			message.channel.send("Ooops, something went wrong in the code here.").catch((err) => {rw.log(err);});
 		}
 	}
 
@@ -186,7 +186,7 @@ bot.on('message', message =>
 
 		if (offlineGames === "" && onlineGames === "")
 		{
-			message.channel.send("There are no games hosted.");
+			message.channel.send("There are no games hosted.").catch((err) => {rw.log(err);});
 			return;
 		}
 
@@ -208,7 +208,7 @@ bot.on('message', message =>
 		if (onlineGames.length > 1900)
 		{
 			var l = Math.ceil(onlineGames.length / 1500);
-			message.channel.send("The following games are **online**:\n");
+			message.channel.send("The following games are **online**:\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < l; i++)
 			{
@@ -228,7 +228,7 @@ bot.on('message', message =>
 		if (offlineGames.length > 1900)
 		{
 			var l = Math.ceil(offlineGames.length / 1500);
-			message.channel.send("\n\nThe following games are saved, but **currently offline**:\n");
+			message.channel.send("\n\nThe following games are saved, but **currently offline**:\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < l; i++)
 			{
@@ -253,7 +253,7 @@ bot.on('message', message =>
 
 		if (fs.existsSync(path) === false)
 		{
-			message.author.send("An error occurred. No mods directory was found on the server.");
+			message.author.send("An error occurred. No mods directory was found on the server.").catch((err) => {rw.log(err);});
 			return;
 		}
 
@@ -262,11 +262,11 @@ bot.on('message', message =>
 			if (err)
 			{
 				rw.log("An error occurred while reading the mods directory:\n\n" + err);
-				message.author.send("An error occurred while reading the mods directory.");
+				message.author.send("An error occurred while reading the mods directory.").catch((err) => {rw.log(err);});
 				return;
 			}
 
-			message.author.send("Here are the mods available on the server:\n\n");
+			message.author.send("Here are the mods available on the server:\n\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < files.length; i++)
 			{
@@ -288,7 +288,7 @@ bot.on('message', message =>
 
 		if (fs.existsSync(path) === false)
 		{
-			message.author.send("An error occurred. No mods directory was found on the server.");
+			message.author.send("An error occurred. No mods directory was found on the server.").catch((err) => {rw.log(err);});
 			return;
 		}
 
@@ -297,11 +297,11 @@ bot.on('message', message =>
 			if (err)
 			{
 				rw.log("An error occurred while reading the mods directory:\n\n" + err);
-				message.author.send("An error occurred while reading the mods directory.");
+				message.author.send("An error occurred while reading the mods directory.").catch((err) => {rw.log(err);});
 				return;
 			}
 
-			message.author.send("Here are the mods available on the server:\n\n");
+			message.author.send("Here are the mods available on the server:\n\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < files.length; i++)
 			{
@@ -324,7 +324,7 @@ bot.on('message', message =>
 
 		if (fs.existsSync(path) === false)
 		{
-			message.author.send("An error occurred. No maps directory was found on the server.");
+			message.author.send("An error occurred. No maps directory was found on the server.").catch((err) => {rw.log(err);});
 			return;
 		}
 
@@ -333,11 +333,11 @@ bot.on('message', message =>
 			if (err)
 			{
 				rw.log("An error occurred while reading the maps directory:\n\n" + err);
-				message.author.send("An error occurred while reading the maps directory.");
+				message.author.send("An error occurred while reading the maps directory.").catch((err) => {rw.log(err);});
 				return;
 			}
 
-			message.author.send("Here are the maps available on the server:\n\n");
+			message.author.send("Here are the maps available on the server:\n\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < files.length; i++)
 			{
@@ -361,7 +361,7 @@ bot.on('message', message =>
 
 		if (fs.existsSync(path) === false)
 		{
-			message.author.send("An error occurred. No maps directory was found on the server.");
+			message.author.send("An error occurred. No maps directory was found on the server.").catch((err) => {rw.log(err);});
 			return;
 		}
 
@@ -370,11 +370,11 @@ bot.on('message', message =>
 			if (err)
 			{
 				rw.log("An error occurred while reading the maps directory:\n\n" + err);
-				message.author.send("An error occurred while reading the maps directory.");
+				message.author.send("An error occurred while reading the maps directory.").catch((err) => {rw.log(err);});
 				return;
 			}
 
-			message.author.send("Here are the maps available on the server:\n\n");
+			message.author.send("Here are the maps available on the server:\n\n").catch((err) => {rw.log(err);});
 
 			for (var i = 0; i < files.length; i++)
 			{
@@ -767,7 +767,7 @@ bot.on('message', message =>
 		rw.log(username + " requested to delete " + gameKey + ".");
 		games[gameKey].deleteSave();
 		delete games[gameKey];
-		message.channel.send("The game " + gameKey + " and its data files have been deleted (the dom/coe save files still remain).");
+		message.channel.send("The game " + gameKey + " and its data files have been deleted (the dom/coe save files still remain).").catch((err) => {rw.log(err);});
 	}
 
 	else if (/^\%KILL/i.test(input))
@@ -1083,7 +1083,7 @@ bot.on('message', message =>
 			}
 
 			games[gameKey].untrack();
-			message.author.send("The game is now no longer tracked. Turn and timer announcements will stop, although you will have to delete the channel and player role manually if you so wish.");
+			message.author.send("The game is now no longer tracked. Turn and timer announcements will stop, although you will have to delete the channel and player role manually if you so wish.").catch((err) => {rw.log(err);});
 		}
 
 		else if (dom4Host.instances[username] != null)
@@ -1384,7 +1384,7 @@ bot.on("disconnect", () =>
 
 	if (owner)
 	{
-		owner.send("I have been disconnected!");
+		owner.send("I have been disconnected!").catch((err) => {rw.log(err);});
 	}
 });
 
@@ -1394,7 +1394,7 @@ bot.on("reconnecting", () =>
 
 	if (owner)
 	{
-		//owner.send("Trying to reconnect...");
+		//owner.send("Trying to reconnect...").catch((err) => {rw.log(err);});
 	}
 });
 
@@ -1414,7 +1414,7 @@ bot.on("error", () =>
 
 	if (owner)
 	{
-		owner.send("Something went wrong! I am dying D':");
+		owner.send("Something went wrong! I am dying D':").catch((err) => {rw.log(err);});
 	}
 });
 
