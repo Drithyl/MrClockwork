@@ -594,10 +594,10 @@ function validateAIPlayers(aiplayers, username)
 
 	for (var i = 0; i < list.length; i++)
 	{
-    var natNumber = list[i].replace(/\D/g, "");
+    var natNumber = +list[i].replace(/\D/g, "");
     var difficulty = list[i].replace(/\d/g, "").trim().toLowerCase();
 
-    if (isNaN(+natNumber))
+    if (isNaN(natNumber) === true)
     {
       rw.log("Each nation must be specified by its in-game number. To see a list, type `%nations`.");
       result.data = "Each nation must be specified by its in-game number. To see a list, type `%nations`.";
@@ -611,13 +611,13 @@ function validateAIPlayers(aiplayers, username)
       return result;
     }
 
-		if (module.exports.instances[username].settingsPack.era == 1 && (natNumber < 5 || natNumber > 22) && (natNumber < 25 || natNumber > 31) && (natNumber < 83 || natNumber > 86) && natNumber != 95)
+		if (module.exports.instances[username].settingsPack.era == 1 && (natNumber < 5 || natNumber > 22) && (natNumber < 24 || natNumber > 31) && (natNumber < 36 || natNumber > 40))
 		{
 			result.data = "You can only add nations for the selected era (Early Age). To see a list, type `%nations`.";
       return result;
     }
 
-		if (module.exports.instances[username].settingsPack.era == 2 && (natNumber < 33 || natNumber > 56) && (natNumber < 57 || natNumber > 58) && (natNumber < 87 || natNumber > 90) && natNumber != 96)
+		if (module.exports.instances[username].settingsPack.era == 2 && (natNumber < 43 || natNumber > 68) && (natNumber < 73 || natNumber > 77))
 		{
 			result.data = "You can only add nations for the selected era (Middle Age). To see a list, type `%nations`.";
       return result;
