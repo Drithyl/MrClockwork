@@ -193,7 +193,7 @@ function validateName(name, username)
     return result;
   }
 
-	if (/[ !@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]/.test(name) == true)
+	if (/[^0-9a-zA-Z_~]/.test(name) == true)
 	{
     rw.log("The game name " + name + " contains invalid characters. Only letters, numbers and underscores are allowed.");
     result.data = "The game name " + name + " contains invalid characters. Only letters, numbers and underscores are allowed.";
