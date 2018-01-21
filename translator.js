@@ -113,7 +113,7 @@ module.exports =
     17: "EA Agartha", 18: "EA Tir na n'Og", 19: "EA Fomoria", 20: "EA Vanheim",
     21: "EA Helheim", 22: "EA Niefelheim", 24: "EA Rus", 25: "EA Kailasa", 26: "EA Lanka",
     27: "EA Yomi", 28: "EA Hinnom", 29: "EA Ur", 30: "EA Berytos",
-    31: "EA Xibalba", 43: "MA Arcoscephale", 44: "MA Ermor", 45: "MA Sceleria",
+    31: "EA Xibalba", 32: "EA Mekone", 43: "MA Arcoscephale", 44: "MA Ermor", 45: "MA Sceleria",
     46: "MA Pythium", 47: "MA Man", 48: "MA Eriu", 49: "MA Ulm",
     50: "MA Marignon", 51: "MA Mictlan", 52: "MA T'ien Ch'i", 53: "MA Machaka",
     54: "MA Agartha", 55: "MA Abysia", 56: "MA Caelum", 57: "MA C'tis",
@@ -179,7 +179,8 @@ module.exports =
     "late_utgard.2h": "LA Utgard",
     "early_yomi.2h": "EA Yomi",
     "early_therodos.2h": "EA Therodos",
-    "mid_ys.2h": "MA Ys"
+    "mid_ys.2h": "MA Ys",
+    "early_mekone.2h": "EA Mekone"
   },
 
   dom5NationNamesToNumbers:
@@ -190,7 +191,7 @@ module.exports =
     "EA Agartha": 17, "EA Tir na n'Og": 18, "EA Fomoria": 19, "EA Vanheim": 20,
     "EA Helheim": 21, "EA Niefelheim": 22, "EA Rus": 24, "EA Kailasa": 25, "EA Lanka": 26,
     "EA Yomi": 27, "EA Hinnom": 28, "EA Ur": 29, "EA Berytos": 30,
-    "EA Xibalba": 31, "MA Arcoscephale": 43, "MA Ermor": 44, "MA Sceleria": 45,
+    "EA Xibalba": 31, "EA Mekone": 32, "MA Arcoscephale": 43, "MA Ermor": 44, "MA Sceleria": 45,
     "MA Pythium": 46, "MA Man": 47, "MA Eriu": 48, "MA Ulm": 49,
     "MA Marignon": 50, "MA Mictlan": 51, "MA T'ien Ch'i": 52, "MA Machaka": 53,
     "MA Agartha": 54, "MA Abysia": 55, "MA Caelum": 56, "MA C'tis": 57,
