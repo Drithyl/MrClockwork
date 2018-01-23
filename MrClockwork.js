@@ -416,7 +416,7 @@ bot.on('message', message =>
 
 	else if (/^\%REMOVE/i.test(input) && message.channel.type != "dm")
 	{
-		var command = input.replace(/%REMOVE\s*/i, "").trim().toLowerCase();
+		var command = input.replace(/%REMOVE/i, "").toLowerCase();
 		var nation;
 		var gameKey;
 
