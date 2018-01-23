@@ -208,17 +208,17 @@ module.exports =
       return null;
     }
 
-    if (days && days.length)
+    if (days != null && days.length > 0)
     {
       timer.days = +days[0].replace(/\D/g, "");
     }
 
-    if (hours && hours.length)
+    if (hours != null && hours.length > 0)
     {
       timer.hours = +hours[0].replace(/\D/g, "");
     }
 
-    if (minutes && minutes.length)
+    if (minutes != null && minutes.length > 0)
     {
       timer.minutes = +minutes[0].replace(/\D/g, "");
     }

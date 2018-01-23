@@ -414,23 +414,18 @@ bot.on('message', message =>
 		message.author.send(str.toBox(), {split: {prepend: "```", append: "```"}});
 	}
 
-	else if (/^\%REMOVE/i.test(input) && message.channel.type != "dm")
+	else if (/^\%REMOVE\s*(\w+)?\s*(\w+)?/i.test(input) && message.channel.type != "dm")
 	{
 		var command = input.replace(/%REMOVE/i, "").toLowerCase();
-		var nation;
+		var nation = command.replace(/(\w+)?\s*(\w+)?/, "$1");
 		var gameKey;
 
 		if (message.channel.name.includes("_game") === false)
 		{
-			gameKey = command.slice(command.lastIndexOf(" ")).trim();
-			nation = command.replace(gameKey, "").trim();
+			gameKey = command.replace(/(\w+)?\s*(\w+)?/, "$2");
 		}
 
-		else
-		{
-			gameKey = message.channel.name.replace("_game", "").toLowerCase();
-			nation = command.trim();
-		}
+		else gameKey = message.channel.name.replace("_game", "").toLowerCase();
 
 		if (games[gameKey] == null)
 		{
@@ -511,25 +506,34 @@ bot.on('message', message =>
 		});
 	}
 
-	else if (/\%TIMER\s*\w*\s*\d+\s*\w*/i.test(input) && message.channel.type != "dm")
+	else if (/\%TIMER\s*(\d+\w*\d*\w*\d*\w*\d*\w*)\s*(\w*)?/i.test(input) && message.channel.type != "dm")
 	{
-		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/\%timer/i, ""));
+		var command = input.replace(/%TIMER/i, "").trim().toLowerCase();
+		var newTimer = timer.createFromInput(command.replace(/(\d+\w*\d*\w*\d*\w*\d*\w*)\s*(\w*)?/, "$1"));
+		var gameKey;
 
 		if (message.channel.name.includes("_game") === false)
 		{
-			gameKey = input.replace(/%TIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
+			gameKey = command.replace(/(\d+\w*)\s*(\w*)?/, "$2");
+
+			if (games[gameKey] == null)
+			{
+				message.reply("The game can't be found. Make sure you type the timer first and the game name last in the %timer command, like `timer 1d12h6m Humongous_Tragedy`.");
+				return;
+			}
 		}
+
+		else gameKey = message.channel.name.replace("_game", "").toLowerCase();
 
 		if (games[gameKey] == null)
 		{
-			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling.");
+			message.reply("The game can't be found. The channel name might be incorrect.");
 			return;
 		}
 
 		if (games[gameKey].game != "Dom4" && games[gameKey].game != "Dom5")
 		{
-			message.reply("Unfortunately, only Dominions 4 or 5 games have a timer available.");
+			message.reply("Only Dominions games have a timer.");
 			return;
 		}
 
