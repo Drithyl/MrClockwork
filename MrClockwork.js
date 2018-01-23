@@ -414,6 +414,45 @@ bot.on('message', message =>
 		message.author.send(str.toBox(), {split: {prepend: "```", append: "```"}});
 	}
 
+	else if (/^\%REMOVE/i.test(input) && message.channel.type != "dm")
+	{
+		var command = input.replace(/%REMOVE\s*/i, "").trim().toLowerCase();
+		var nation;
+		var gameKey;
+
+		if (message.channel.name.includes("_game") === false)
+		{
+			gameKey = command.slice(command.lastIndexOf(" ")).trim();
+			nation = command.replace(gameKey, "").trim();
+		}
+
+		else
+		{
+			gameKey = message.channel.name.replace("_game", "").toLowerCase();
+			nation = command.trim();
+		}
+
+		if (games[gameKey] == null)
+		{
+			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling. The game name should come at the end of the command, separated by a space.");
+			return;
+		}
+
+		if (games[gameKey].game != "Dom5")
+		{
+			message.reply("Only Dominions 5 games support this function.");
+			return;
+		}
+
+		if (games[gameKey].wasStarted === true)
+		{
+			message.reply("You cannot remove a nation from a game when it has already started. Use this only for when players change nations in the lobby.");
+			return;
+		}
+
+		message.reply(games[gameKey].removeNation(nation));
+	}
+
 	else if (/^\%TIMER$/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();

@@ -55,6 +55,7 @@ module.exports =
       lastHosted: 0,
       firstHosted: Date.now(),
       wasStarted: false,
+      timerChanged: false,
 
       "initGame": initGame,
       "printInfo": printInfo,
@@ -72,6 +73,7 @@ module.exports =
       "kill": kill,
       "changeCurrentTimer": changeCurrentTimer,
       "changeDefaultTimer": changeDefaultTimer,
+      "removeNation": removeNation,
       "addReminder": addReminder,
       "stopReminder": stopReminder,
       "printReminders": printReminders,
@@ -543,7 +545,7 @@ function kill(cb = null, t = this)
 
     if (cb != null)
     {
-      setTimeout(triggerCallback , 600);
+      setTimeout(triggerCallback, 600);
     }
   }
 
@@ -572,6 +574,7 @@ function changeCurrentTimer(timer, t = this)
     t.currenttimer.minutes = timer.minutes;
     t.currenttimer.seconds = timer.seconds;
     t.currenttimer.isPaused = timer.isPaused;
+    t.timerChanged = true;
   });
 }
 
@@ -583,6 +586,49 @@ function changeDefaultTimer(timer, t = this)
   {
     t.defaulttimer = Object.assign(timer);
   });
+}
+
+function removeNation(nation, t = this)
+{
+  var dump = parseDump(t);
+  var name = t.name;
+  var path = config.dom5DataPath + "savedgames/" + name + "/" + nation;
+
+  if (dump[nation] == null)
+  {
+    return "The specified filename is incorrect. Here are the submitted pretenders. Use the filename to remove one of them, like %remove early_abysia.2h:\n\n" + printNations(dump);
+  }
+
+	if (fs.existsSync(path) === false)
+	{
+		return "Could not find the pretender file. Has it already been deleted?";
+	}
+
+  fs.unlinkSync(path);
+
+  kill(function()
+  {
+    host(t.currenttimer, [], t);
+  }, t);
+
+  return "The pretender has been deleted. The lobby will now be restarted, give it a few seconds (you'll have to reconnect to see the change if you're connected to the lobby).";
+}
+
+function printNations(dump)
+{
+  var str = "";
+
+  for (var nation in dump)
+  {
+    if (dump[nation].controller != 1)
+    {
+      continue;
+    }
+
+    str += (dump[nation].nationName + ": ").width(40) + nation + "\n";
+  }
+
+  return str.toBox();
 }
 
 function addReminder(user, hoursLeft, t = this)
@@ -837,6 +883,16 @@ function updateTurnInfo(info, t = this)
     announceTurn(newTimerInfo, t);
     t.currenttimer.turn = newTimerInfo.turn;
     changeCurrentTimer(t.defaulttimer, t);
+    return;
+  }
+
+  else if (t.timerChanged === true)
+  {
+    //timer was changed right before this check, so return,
+    //otherwise the bot is likely to make an announcement or
+    //send reminders that don't match, since the statuspage
+    //file is not yet updated
+    t.timerChanged = false;
     return;
   }
 
