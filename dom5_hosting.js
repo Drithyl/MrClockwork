@@ -241,7 +241,7 @@ function validateMapfile(mapfile, username)
   	return result;
   }
 
-  if (mapfile.includes(".map") == false)
+  if (/\.map/i.test(mapfile) === false)
   {
     rw.log("The file name " + mapfile + " does not contain the .map extension.");
 	  result.data = "The file name " + mapfile + " does not contain the .map extension. Please make sure you include the .map extension.";
@@ -256,7 +256,11 @@ function validateMapfile(mapfile, username)
   }
 
   result.success = true;
-  result.data = mapfile.toLowerCase();
+  result.data = fs.readdirSync(config.dom5DataPath + "maps").filter(function(map)
+  {
+    return mapfile.toLowerCase() == map.toLowerCase();
+  })[0];
+
   return result;
 }
 
