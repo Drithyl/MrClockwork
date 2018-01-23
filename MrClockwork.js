@@ -444,6 +444,12 @@ bot.on('message', message =>
 			return;
 		}
 
+		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
+		{
+			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
+			return;
+		}
+
 		if (games[gameKey].wasStarted === true)
 		{
 			message.reply("You cannot remove a nation from a game when it has already started. Use this only for when players change nations in the lobby.");
