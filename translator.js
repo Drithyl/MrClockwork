@@ -575,6 +575,21 @@ module.exports =
        return "Score Graphs: " + value;
      }
 
+     if (key === "teamgame")
+     {
+       if (value == "on")
+       {
+         return "Disciple Game: on, clustered starts";
+       }
+
+       else if (value == "on, off")
+       {
+         return "Disciple Game: on, unclustered starts"
+       }
+
+       else return "Disciple Game: off"
+     }
+
      if (key === "masterpassword")
      {
        return "Master Password (probably don't share this): " + value;

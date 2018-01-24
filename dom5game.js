@@ -39,6 +39,7 @@ module.exports =
       storyevents: "minor",
       globalslots: 5,
       scoregraphs: "off",
+      teamgame: "off",
       masterpassword: "",
       aiplayers: "none",
       defaulttimer: timer.create(),
@@ -262,6 +263,16 @@ function settingsToExeArguments(t = this)
   else if (t.scoregraphs == "disabled")
   {
     args.push("--nonationinfo");
+  }
+
+  if (t.teamgame == "on")
+  {
+    args.push("--teamgame", "clustered");
+  }
+
+  else if (t.teamgame == "on, off")
+  {
+    args.push("--teamgame");
   }
 
   if (t.storyevents === "off")

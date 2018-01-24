@@ -31,6 +31,7 @@ module.exports =
     storyevents: validateStoryEvents,
     globalslots: validateGlobalSlots,
     scoregraphs: validateScoregraphs,
+    teamgame: validateTeamgame,
     masterpassword: validateMasterPassword,
     aiplayers: validateAIPlayers,
     defaulttimer: validateTimer
@@ -560,6 +561,24 @@ function validateScoregraphs(scoregraphs, username)
 		result.data = "Input " + scoregraphs + " is incorrect. Score graphs must be 'on' or 'off' (this removes even the site and spell effects that provide graph info).";
     return result;
   }
+}
+
+function validateTeamgame(teamgame, username)
+{
+  var result = {success: false, data: teamgame.toLowerCase()};
+
+	if (teamgame.toLowerCase() == "off" || teamgame.toLowerCase() == "on" || teamgame.toLowerCase() == "on, off")
+	{
+    result.success = true;
+    return result;
+	}
+
+	else
+	{
+    rw.log("Input " + teamgame + " is incorrect. Disciple Game must be set to 'off', 'on' or 'on, off' (for unclustered starts).")
+		result.data = "Input " + teamgame + " is incorrect. Disciple Game must be set to 'off', 'on' or 'on, off' (for unclustered starts).";
+    return result;
+	}
 }
 
 function validateMasterPassword(masterpassword, username)
