@@ -414,6 +414,145 @@ bot.on('message', message =>
 		message.author.send(str.toBox(), {split: {prepend: "```", append: "```"}});
 	}
 
+	else if (/^\%ADD ROLE/i.test(input) && message.channel.type != "dm")
+	{
+		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
+		var membersMap = message.mentions.members;
+		var rolesMap = myGuild.roles;
+
+		if (message.channel.name.includes("_game") === false)
+		{
+			var roles = input.replace(/%ADD ROLE/i, "").trim().toLowerCase();
+
+			if (rolesMap.size <= 0)
+			{
+				message.reply("No role is available in the guild.");
+				return;
+			}
+
+			for (var [k, v] of rolesMap)
+			{
+				if (roles.includes(v.name.toLowerCase()) === false)
+				{
+					continue;
+				}
+
+				//only works if the member's highest role is higher than the other roles he tries to give himself.
+				if (v.name.toLowerCase().includes(" player") === true)
+				{
+					message.reply("Only the game's organizer or an Admin, Pretender or GM can give the role " + v.name + " to you.");
+				}
+
+				else if (member.highestRole.comparePositionTo(v) > 0)
+				{
+					member.addRole(v);
+					message.reply("The role " + v.name + " was added.");
+				}
+
+				else
+				{
+					message.reply("You do not have permissions to add the role " + v.name + " to yourself. You can only add roles lower than yours.");
+				}
+			}
+
+			return;
+		}
+
+		if (games[gameKey] == null)
+		{
+			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
+			return;
+		}
+
+		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
+		{
+			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
+			return;
+		}
+
+		if (games[gameKey].role == null)
+		{
+			message.reply("There doesn't seem to be a role created for this game yet. You can use the `%record mygamename` command PMed to me to create one automatically.");
+			return;
+		}
+
+		if (membersMap.size <= 0)
+		{
+			message.reply("You did not mention any user. Use @ to mention a user to whom you want to give the role.");
+			return;
+		}
+
+		for (var [k, v] of membersMap)
+		{
+			v.addRole(games[gameKey].role);
+		}
+
+		message.reply("The roles were added.");
+	}
+
+	else if (/^\%REMOVE ROLE/i.test(input) && message.channel.type != "dm")
+	{
+		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
+		var membersMap = message.mentions.members;
+		var rolesMap = member.roles;
+
+		if (message.channel.name.includes("_game") === false)
+		{
+			var roles = input.replace(/%REMOVE ROLE/i, "").trim().toLowerCase();
+
+			if (rolesMap.size <= 0)
+			{
+				message.reply("You do not have any role.");
+				return;
+			}
+
+			for (var [k, v] of rolesMap)
+			{
+				if (roles.includes(v.name.toLowerCase()) === false)
+				{
+					continue;
+				}
+
+
+				member.removeRole(v);
+				message.reply("The role " + v.name + " was removed.");
+			}
+
+			return;
+		}
+
+		if (games[gameKey] == null)
+		{
+			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
+			return;
+		}
+
+		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
+		{
+			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
+			return;
+		}
+
+		if (games[gameKey].role == null)
+		{
+			message.reply("There doesn't seem to be a role created for this game yet. You can use the `%record mygamename` command PMed to me to create one automatically.");
+			return;
+		}
+
+		if (membersMap.size <= 0)
+		{
+			message.reply("You did not mention any user. Use @ to mention a user from whom you want to remove the role.");
+			return;
+		}
+
+		for (var [k, v] of membersMap)
+		{
+			v.removeRole(games[gameKey].role);
+		}
+
+		message.reply("The roles were removed.");
+	}
+
 	else if (/^\%REMOVE\s*(\w+)?\s*(\w+)?/i.test(input) && message.channel.type != "dm")
 	{
 		var command = input.replace(/%REMOVE/i, "").toLowerCase();
@@ -623,145 +762,6 @@ bot.on('message', message =>
 			rw.log(username + " requested a default timer change: " + input);
 			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
 		}
-	}
-
-	else if (/^\%ADD ROLE/i.test(input) && message.channel.type != "dm")
-	{
-		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var membersMap = message.mentions.members;
-		var rolesMap = myGuild.roles;
-
-		if (message.channel.name.includes("_game") === false)
-		{
-			var roles = input.replace(/%ADD ROLE/i, "").trim().toLowerCase();
-
-			if (rolesMap.size <= 0)
-			{
-				message.reply("No role is available in the guild.");
-				return;
-			}
-
-			for (var [k, v] of rolesMap)
-			{
-				if (roles.includes(v.name.toLowerCase()) === false)
-				{
-					continue;
-				}
-
-				//only works if the member's highest role is higher than the other roles he tries to give himself.
-				if (v.name.toLowerCase().includes(" player") === true)
-				{
-					message.reply("Only the game's organizer or an Admin, Pretender or GM can give the role " + v.name + " to you.");
-				}
-
-				else if (member.highestRole.comparePositionTo(v) > 0)
-				{
-					member.addRole(v);
-					message.reply("The role " + v.name + " was added.");
-				}
-
-				else
-				{
-					message.reply("You do not have permissions to add the role " + v.name + " to yourself. You can only add roles lower than yours.");
-				}
-			}
-
-			return;
-		}
-
-		if (games[gameKey] == null)
-		{
-			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
-			return;
-		}
-
-		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
-		{
-			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
-			return;
-		}
-
-		if (games[gameKey].role == null)
-		{
-			message.reply("There doesn't seem to be a role created for this game yet. You can use the `%record mygamename` command PMed to me to create one automatically.");
-			return;
-		}
-
-		if (membersMap.size <= 0)
-		{
-			message.reply("You did not mention any user. Use @ to mention a user to whom you want to give the role.");
-			return;
-		}
-
-		for (var [k, v] of membersMap)
-		{
-			v.addRole(games[gameKey].role);
-		}
-
-		message.reply("The roles were added.");
-	}
-
-	else if (/^\%REMOVE ROLE/i.test(input) && message.channel.type != "dm")
-	{
-		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var membersMap = message.mentions.members;
-		var rolesMap = member.roles;
-
-		if (message.channel.name.includes("_game") === false)
-		{
-			var roles = input.replace(/%REMOVE ROLE/i, "").trim().toLowerCase();
-
-			if (rolesMap.size <= 0)
-			{
-				message.reply("You do not have any role.");
-				return;
-			}
-
-			for (var [k, v] of rolesMap)
-			{
-				if (roles.includes(v.name.toLowerCase()) === false)
-				{
-					continue;
-				}
-
-
-				member.removeRole(v);
-				message.reply("The role " + v.name + " was removed.");
-			}
-
-			return;
-		}
-
-		if (games[gameKey] == null)
-		{
-			message.reply("The game is not in my list of saved games. Are you sure this channel name is correct? (it should be the game name + '_game', like 'midnight_game' or 'total_expression_game').");
-			return;
-		}
-
-		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
-		{
-			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
-			return;
-		}
-
-		if (games[gameKey].role == null)
-		{
-			message.reply("There doesn't seem to be a role created for this game yet. You can use the `%record mygamename` command PMed to me to create one automatically.");
-			return;
-		}
-
-		if (membersMap.size <= 0)
-		{
-			message.reply("You did not mention any user. Use @ to mention a user from whom you want to remove the role.");
-			return;
-		}
-
-		for (var [k, v] of membersMap)
-		{
-			v.removeRole(games[gameKey].role);
-		}
-
-		message.reply("The roles were removed.");
 	}
 
 	else if (/^\%START/i.test(input))
