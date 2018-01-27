@@ -646,7 +646,7 @@ function validateAIPlayers(aiplayers, username)
       return result;
     }
 
-		if (module.exports.instances[username].settingsPack.era == 3 && (natNumber < 60 || natNumber > 81) && (natNumber < 91 || natNumber > 92))
+		if (module.exports.instances[username].settingsPack.era == 3 && (natNumber < 80 || natNumber > 101) && (natNumber < 106 || natNumber > 108))
 		{
 			result.data = "You can only add nations for the selected era (Late Age). To see a list, type `%nations`.";
       return result;
