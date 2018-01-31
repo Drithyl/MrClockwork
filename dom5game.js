@@ -9,7 +9,7 @@ const config = require("../MrClockwork/config.json");
 module.exports =
 {
   guild: null,
-  list: null,
+  list: {},
 
   init: function(games, guild)
   {
