@@ -267,7 +267,7 @@ function settingsToExeArguments(t = this)
 
   if (t.teamgame == "on")
   {
-    args.push("--teamgame", "clustered");
+    args.push("--teamgame", "--clustered");
   }
 
   else if (t.teamgame == "on, off")
