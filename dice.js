@@ -38,8 +38,12 @@ module.exports =
       	}
 
         result = roll(+num, +max, explode);
-        total += result;
-        msg += result + " + ";
+        total += result.total;
+
+        for (var i = 0; i < result.rolls.length; i++)
+        {
+          msg += result.rolls[i] + " + ";
+        }
       }
 
       else if (/^\+?\d+/i.test(inputCopy) === true)
@@ -96,22 +100,22 @@ function findAverage(rolls, literals)
 
 function roll(diceNum, max, explosive = false)
 {
-  var str = "";
-  var total = 0;
+  var result = {rolls: [], total: 0};
 
   for (var i = 0; i < diceNum; i++)
   {
-    var result = Math.floor((Math.random() * max) + 1);
+    var r = Math.floor((Math.random() * max) + 1);
 
-    if (explosive == true && result == max)
+    if (explosive === true && r == max)
     {
-      result += explodeDie(max);
+      r += explodeDie(max);
     }
 
-    total += result;
+    result.total += r;
+    result.rolls.push(r);
   }
 
-  return total;
+  return result;
 }
 
 function explodeDie(max)
