@@ -658,6 +658,7 @@ bot.on('message', message =>
 		catch (err)
 		{
 			message.reply(err);
+			return;
 		}
 
 		games[gameKey].changeCurrentTimer(newTimer);
@@ -688,6 +689,7 @@ bot.on('message', message =>
 		catch (err)
 		{
 			message.reply(err);
+			return;
 		}
 
 		games[gameKey].changeCurrentTimer(newTimer);
@@ -718,6 +720,7 @@ bot.on('message', message =>
 		catch (err)
 		{
 			message.reply(err);
+			return;
 		}
 
 		games[gameKey].changeDefaultTimer(newTimer);
@@ -748,6 +751,7 @@ bot.on('message', message =>
 		catch (err)
 		{
 			message.reply(err);
+			return;
 		}
 
 		games[gameKey].changeDefaultTimer(newTimer);
