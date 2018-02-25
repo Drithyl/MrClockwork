@@ -645,59 +645,49 @@ bot.on('message', message =>
 		});
 	}
 
-	else if (/\%TIMER\s*(\d+\w*\d*\w*\d*\w*\d*\w*)\s*(\w*)?/i.test(input) && message.channel.type != "dm")
+	else if (/^\%TIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
 	{
-		var command = input.replace(/%TIMER/i, "").trim().toLowerCase();
-		var newTimer = timer.createFromInput(command.replace(/(\d+\w*\d*\w*\d*\w*\d*\w*)\s*(\w*)?/, "$1"));
-		var gameKey;
+		var gameKey = input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$1").trim().toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$2"));
 
-		if (message.channel.name.includes("_game") === false)
+		try
 		{
-			gameKey = command.replace(/(\d+\w*)\s*(\w*)?/, "$2");
-
-			if (games[gameKey] == null)
-			{
-				message.reply("The game can't be found. Make sure you type the timer first and the game name last in the %timer command, like `timer 1d12h6m Humongous_Tragedy`.");
-				return;
-			}
+			timerInputCheck(message, member, gameKey);
 		}
 
-		else gameKey = message.channel.name.replace("_game", "").toLowerCase();
-
-		if (games[gameKey] == null)
+		catch (err)
 		{
-			message.reply("The game can't be found. The channel name might be incorrect.");
-			return;
+			message.reply(err);
 		}
 
-		if (games[gameKey].game != "Dom4" && games[gameKey].game != "Dom5")
+		games[gameKey].changeCurrentTimer(newTimer);
+
+		if (newTimer.isPaused === true)
 		{
-			message.reply("Only Dominions games have a timer.");
-			return;
+			rw.log(message.author.username + " paused the timer: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
 		}
 
-		if (games[gameKey].instance == null)
+		else
 		{
-			message.reply("There is no instance of this game online. It might be in the process of a timer change if someone else used the command, in which case you'll need to wait a few seconds.");
-			return;
+			rw.log(username + " requested a timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
+		}
+	}
+
+	else if (/^\%TIMER\s*(\w+)/i.test(input) === true && message.channel.type != "dm")
+	{
+		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)/i, "$1"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
 		}
 
-		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
+		catch (err)
 		{
-			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
-			return;
-		}
-
-		if (games[gameKey].instance == null)
-		{
-			message.reply("The game's instance isn't online, so the timer cannot be changed right now (it's not ticking down either). An organizer, GM, Pretender or Admin can fire up the game instance by using the command `%launch <gamename>` by pm.");
-			return;
-		}
-
-		if (games[gameKey].wasStarted === false)
-		{
-			message.reply("The game hasn't been started yet.");
-			return;
+			message.reply(err);
 		}
 
 		games[gameKey].changeCurrentTimer(newTimer);
@@ -715,38 +705,49 @@ bot.on('message', message =>
 		}
 	}
 
-	else if (/\%DTIMER\s*\w*\s*\d+\s*\w*/i.test(input) && message.channel.type != "dm")
+	else if (/^\%DTIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
+	{
+		var gameKey = input.replace(/^\%DTIMER\s*(\w+)/i, "$1").trim().toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)\s+(\w+)/i, "$2"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
+		}
+
+		catch (err)
+		{
+			message.reply(err);
+		}
+
+		games[gameKey].changeDefaultTimer(newTimer);
+
+		if (newTimer.isPaused == true)
+		{
+			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
+		}
+
+		else
+		{
+			rw.log(username + " requested a default timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
+		}
+	}
+
+	else if (/^\%DTIMER\s*(\w+)/i.test(input) === true && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/\%dtimer/i, ""));
+		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)/i, "$1"));
 
-		if (message.channel.name.includes("_game") === false)
+		try
 		{
-			gameKey = input.replace(/%DTIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
+			timerInputCheck(message, member, gameKey);
 		}
 
-		if (games[gameKey] == null)
+		catch (err)
 		{
-			message.reply("The game is not in my list of saved games. If it's a game with a channel, the channel name might not be matching. Otherwise, make sure you check your spelling.");
-			return;
-		}
-
-		if (games[gameKey].game != "Dom4" && games[gameKey].game != "Dom5")
-		{
-			message.reply("Unfortunately, only Dominions 4 or 5 games have a timer available.");
-			return;
-		}
-
-		if (checkPermissions(message.author.id, member, games[gameKey]) === false)
-		{
-			message.reply("Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.");
-			return;
-		}
-
-		if (games[gameKey].wasStarted === false)
-		{
-			message.reply("The game hasn't been started yet.");
-			return;
+			message.reply(err);
 		}
 
 		games[gameKey].changeDefaultTimer(newTimer);
@@ -1264,6 +1265,39 @@ function checkPermissions(id, member, game)
 	}
 
 	else return false;
+}
+
+function timerInputCheck(message, member, gameKey)
+{
+	if (games[gameKey] == null)
+	{
+		throw "The game can't be found. Make sure you type the timer first and the game name last in the %timer command, like `timer 1d12h6m Humongous_Tragedy`. If this is not a blitz, then the channel name might be wrong (they always finish in _game)";
+	}
+
+	if (games[gameKey].game != "Dom4" && games[gameKey].game != "Dom5")
+	{
+		throw "Only Dominions games have a timer."
+	}
+
+	if (games[gameKey].instance == null)
+	{
+		throw "There is no instance of this game online. It might be in the process of a timer change if someone else used the command, in which case you'll need to wait a few seconds.";
+	}
+
+	if (checkPermissions(message.author.id, member, games[gameKey]) === false)
+	{
+		throw "Sorry, you do not have the permissions to do this. Only this game's organizer (" + games[gameKey].organizer + ") or Admins, Pretenders or GMs can do this.";
+	}
+
+	if (games[gameKey].instance == null)
+	{
+		throw "The game's instance isn't online, so the timer cannot be changed right now (it's not ticking down either). An organizer, GM, Pretender or Admin can fire up the game instance by using the command `%launch <gamename>` by pm.";
+	}
+
+	if (games[gameKey].wasStarted === false)
+	{
+		throw "The game hasn't been started yet.";
+	}
 }
 
 function mentionRole(role)
