@@ -1001,9 +1001,9 @@ bot.on('message', message =>
 			message.reply(games[gameKey].printReminders(message.author));
 		}
 
-		else if (/^\%REMINDER\s+(\w+)\s+(\d+)/i.test(input))
+		else if (/^\%REMINDER\s+\w+\s+\d+/i.test(input))
 		{
-			var gameKey = input.replace(/(\%reminder)|(\d)/gi, "").toLowerCase().trim();
+			var gameKey = input.replace(/^\%REMINDER\s+(\w+)\s+(\d+)/i, "$1").toLowerCase().trim();
 			var hoursLeft = +input.replace(/\%REMINDER\s+(\w+)\s+(\d+)/i, "$2");
 
 			if (games[gameKey] == null)
@@ -1035,7 +1035,7 @@ bot.on('message', message =>
 
 		else if (/^\%STOP\s*REMINDER\s*\w+\s*\d*/i.test(input))
 		{
-			var gameKey = input.replace(/(\%stop\s*reminder)|(\d)/gi, "").toLowerCase().trim();
+			var gameKey = input.replace(/^\%STOP\s*REMINDER\s*(\w+)\s*(\d*)/i, "$1").toLowerCase().trim();
 			var hoursLeft = +input.replace(/^\%STOP\s*REMINDER\s*(\w+)\s*(\d*)/i, "$2");
 
 			if (hoursLeft === "")
