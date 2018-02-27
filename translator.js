@@ -119,7 +119,8 @@ module.exports =
     54: "MA Agartha", 55: "MA Abysia", 56: "MA Caelum", 57: "MA C'tis",
     58: "MA Pangaea", 59: "MA Asphodel", 60: "MA Vanheim", 61: "MA Jotunheim",
     62: "MA Vanarus", 63: "MA Bandar Log", 64: "MA Shinuyama", 65: "MA Ashdod",
-    66: "MA Uruk", 67: "MA Nazca", 68: "MA Xibalba", 80: "LA Arcoscephale", 81: "LA Pythium",
+    66: "MA Uruk", 67: "MA Nazca", 68: "MA Xibalba", 69: "MA Phlegra", 70: "MA Phaeacia",
+    80: "LA Arcoscephale", 81: "LA Pythium",
     82: "LA Lemuria", 83: "LA Man", 84: "LA Ulm", 85: "LA Marignon",
     86: "LA Mictlan", 87: "LA T'ien Ch'i", 89: "LA Jomon", 90: "LA Agartha",
     91: "LA Abysia", 92: "LA Caelum", 93: "LA C'tis", 94: "LA Pangaea",
@@ -180,7 +181,9 @@ module.exports =
     "early_yomi.2h": "EA Yomi",
     "early_therodos.2h": "EA Therodos",
     "mid_ys.2h": "MA Ys",
-    "early_mekone.2h": "EA Mekone"
+    "early_mekone.2h": "EA Mekone",
+    "mid_phlegra.2h": "MA Phlegra",
+    "mid_phaeacia.2h": "MA Phaeacia"
   },
 
   dom5NationNamesToNumbers:
@@ -197,7 +200,8 @@ module.exports =
     "MA Agartha": 54, "MA Abysia": 55, "MA Caelum": 56, "MA C'tis": 57,
     "MA Pangaea": 58, "MA Asphodel": 59, "MA Vanheim": 60, "MA Jotunheim": 61,
     "MA Vanarus": 62, "MA Bandar Log": 63, "MA Shinuyama": 64, "MA Ashdod": 65,
-    "MA Uruk": 66, "MA Nazca": 67, "MA Xibalba": 68, "LA Arcoscephale": 80, "LA Pythium": 81,
+    "MA Uruk": 66, "MA Nazca": 67, "MA Xibalba": 68, "MA Phlegra": 69, "MA Phaeacia": 70,
+    "LA Arcoscephale": 80, "LA Pythium": 81,
     "LA Lemuria": 82, "LA Man": 83, "LA Ulm": 84, "LA Marignon": 85,
     "LA Mictlan": 86, "LA T'ien Ch'i": 87, "LA Jomon": 89, "LA Agartha": 90,
     "LA Abysia": 91, "LA Caelum": 92, "LA C'tis": 93, "LA Pangaea": 94,
