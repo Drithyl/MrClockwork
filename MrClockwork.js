@@ -1194,6 +1194,11 @@ bot.on('message', message =>
 
 event.e.on("minute", () =>
 {
+	if (wasInitialized === false)
+	{
+		return;
+	}
+
 	for (inst in games)
 	{
 		if (games[inst].game === "Dom4" || games[inst].game === "Dom5")
@@ -1205,6 +1210,11 @@ event.e.on("minute", () =>
 
 event.e.on("5 seconds", () =>
 {
+	if (wasInitialized === false)
+	{
+		return;
+	}
+
 	for (inst in games)
 	{
 		if (games[inst].game === "CoE4")
@@ -1216,8 +1226,10 @@ event.e.on("5 seconds", () =>
 
 event.e.on("hour", () =>
 {
-	//being backed up externally by Cobian
-	//backup();
+	if (wasInitialized === false)
+	{
+		return;
+	}
 
 	for (var key in games)
 	{
@@ -1438,7 +1450,14 @@ function loadGame(files, finalCb)
 
 		else if (key === "organizer" && value != null)
 		{
-			return myGuild.members.get(value);
+			var organizer = myGuild.members.get(value);
+
+			if (organizer == null)
+			{
+				organizer = owner;
+			}
+
+			return organizer; 
 		}
 
 		else if (key === "channel" && value != null)
