@@ -531,7 +531,7 @@ function createChannel(message, t = this)
     channel.overwritePermissions(config.modID, {READ_MESSAGES: true, READ_MESSAGE_HISTORY: true, SEND_MESSAGES: true, MANAGE_MESSAGES: true, EMBED_LINKS: true, ATTACH_FILES: true});
     channel.overwritePermissions(config.gmID, {READ_MESSAGES: true, READ_MESSAGE_HISTORY: true, SEND_MESSAGES: true, MANAGE_MESSAGES: true, EMBED_LINKS: true, ATTACH_FILES: true});
     channel.overwritePermissions(config.botRoleID, {READ_MESSAGES: true, READ_MESSAGE_HISTORY: true, SEND_MESSAGES: true, EMBED_LINKS: true, ATTACH_FILES: true});
-    channel.overwritePermissions(config.myGuildID, {SEND_MESSAGES: false, EMBED_LINKS: false, ATTACH_FILES: false});  //guild ID is equal to the @everyone role ID
+    channel.overwritePermissions(config.myGuildID, {READ_MESSAGES: true, READ_MESSAGE_HISTORY: true, SEND_MESSAGES: true, EMBED_LINKS: true, ATTACH_FILES: true});  //guild ID is equal to the @everyone role ID
     channel.overwritePermissions(t.role, {READ_MESSAGES: true, READ_MESSAGE_HISTORY: true, SEND_MESSAGES: true, EMBED_LINKS: true, ATTACH_FILES: true});
     message.reply("A new Channel was created and assigned to this game.");
 
