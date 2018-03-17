@@ -553,18 +553,20 @@ bot.on('message', message =>
 		message.reply("The roles were removed.");
 	}
 
-	else if (/^\%REMOVE\s*(\w+)?\s*(\w+)?/i.test(input) && message.channel.type != "dm")
+	else if (/^\%REMOVE\s+(\w+\.2h)?\s*(\w+)?/i.test(input) && message.channel.type != "dm")
 	{
-		var command = input.replace(/%REMOVE/i, "").toLowerCase();
-		var nation = command.replace(/(\w+)?\s*(\w+)?/, "$1");
+		var nation = input.replace(/%REMOVE\s+(\w+\.2h)?\s*(\w+)?/i, "$1");
 		var gameKey;
 
 		if (message.channel.name.includes("_game") === false)
 		{
-			gameKey = command.replace(/(\w+)?\s*(\w+)?/, "$2");
+			gameKey = input.replace(/%REMOVE\s+(\w+\.2h)?\s*(\w+)?/i, "$2").toLowerCase();
 		}
 
 		else gameKey = message.channel.name.replace("_game", "").toLowerCase();
+
+		console.log(nation);
+		console.log(gameKey);
 
 		if (games[gameKey] == null)
 		{
@@ -1457,7 +1459,7 @@ function loadGame(files, finalCb)
 				organizer = owner;
 			}
 
-			return organizer; 
+			return organizer;
 		}
 
 		else if (key === "channel" && value != null)
