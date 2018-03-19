@@ -595,13 +595,137 @@ bot.on('message', message =>
 		message.reply(games[gameKey].removeNation(nation));
 	}
 
-	else if (/^\%TIMER$/i.test(input) && message.channel.type != "dm")
+	else if (/^\%TIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
+	{
+		var gameKey = input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$2").trim().toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$1"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
+		}
+
+		catch (err)
+		{
+			message.reply(err);
+			return;
+		}
+
+		games[gameKey].changeCurrentTimer(newTimer);
+
+		if (newTimer.isPaused === true)
+		{
+			rw.log(message.author.username + " paused the timer: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
+		}
+
+		else
+		{
+			rw.log(username + " requested a timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
+		}
+	}
+
+	else if (/^\%TIMER\s*(\w+)/i.test(input) === true && message.channel.name.includes("_game") === true && message.channel.type != "dm")
+	{
+		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)/i, "$1"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
+		}
+
+		catch (err)
+		{
+			message.reply(err);
+			return;
+		}
+
+		games[gameKey].changeCurrentTimer(newTimer);
+
+		if (newTimer.isPaused == true)
+		{
+			rw.log(message.author.username + " paused the timer: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
+		}
+
+		else
+		{
+			rw.log(username + " requested a timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
+		}
+	}
+
+	else if (/^\%DTIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
+	{
+		var gameKey = input.replace(/^\%DTIMER\s*(\w+)/i, "$2").trim().toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)\s+(\w+)/i, "$1"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
+		}
+
+		catch (err)
+		{
+			message.reply(err);
+			return;
+		}
+
+		games[gameKey].changeDefaultTimer(newTimer);
+
+		if (newTimer.isPaused == true)
+		{
+			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
+		}
+
+		else
+		{
+			rw.log(username + " requested a default timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
+		}
+	}
+
+	else if (/^\%DTIMER\s*(\w+)/i.test(input) === true && message.channel.name.includes("_game") === true && message.channel.type != "dm")
+	{
+		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
+		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)/i, "$1"));
+
+		try
+		{
+			timerInputCheck(message, member, gameKey);
+		}
+
+		catch (err)
+		{
+			message.reply(err);
+			return;
+		}
+
+		games[gameKey].changeDefaultTimer(newTimer);
+
+		if (newTimer.isPaused == true)
+		{
+			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
+		}
+
+		else
+		{
+			rw.log(username + " requested a default timer change: " + input);
+			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
+		}
+	}
+
+	else if (/^\%TIMER\s?(\w+)?/i.test(input) && message.channel.type != "dm")
 	{
 		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
 
 		if (message.channel.name.includes("_game") === false)
 		{
-			gameKey = input.replace(/%TIMER\s*/i, "").replace(/\d*/g, "").trim().toLowerCase();
+			gameKey = input.replace(/^\%TIMER\s?(\w+)/i, "$1").trim().toLowerCase();
 		}
 
 		if (games[gameKey] == null)
@@ -645,130 +769,6 @@ bot.on('message', message =>
 				message.reply("Unless something's wrong, one minute or less remains for the turn to roll. It might even be processing right now. The new turn announcement should come soon.");
 			}
 		});
-	}
-
-	else if (/^\%TIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
-	{
-		var gameKey = input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$1").trim().toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)\s+(\w+)/i, "$2"));
-
-		try
-		{
-			timerInputCheck(message, member, gameKey);
-		}
-
-		catch (err)
-		{
-			message.reply(err);
-			return;
-		}
-
-		games[gameKey].changeCurrentTimer(newTimer);
-
-		if (newTimer.isPaused === true)
-		{
-			rw.log(message.author.username + " paused the timer: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
-		}
-
-		else
-		{
-			rw.log(username + " requested a timer change: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
-		}
-	}
-
-	else if (/^\%TIMER\s*(\w+)/i.test(input) === true && message.channel.type != "dm")
-	{
-		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/^\%TIMER\s*(\w+)/i, "$1"));
-
-		try
-		{
-			timerInputCheck(message, member, gameKey);
-		}
-
-		catch (err)
-		{
-			message.reply(err);
-			return;
-		}
-
-		games[gameKey].changeCurrentTimer(newTimer);
-
-		if (newTimer.isPaused == true)
-		{
-			rw.log(message.author.username + " paused the timer: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The timer has been paused. This might take a few seconds to update ingame.");
-		}
-
-		else
-		{
-			rw.log(username + " requested a timer change: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The timer has been changed. Now " + newTimer.print() + " remain for the new turn to arrive. This might take a few seconds to update ingame.");
-		}
-	}
-
-	else if (/^\%DTIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
-	{
-		var gameKey = input.replace(/^\%DTIMER\s*(\w+)/i, "$1").trim().toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)\s+(\w+)/i, "$2"));
-
-		try
-		{
-			timerInputCheck(message, member, gameKey);
-		}
-
-		catch (err)
-		{
-			message.reply(err);
-			return;
-		}
-
-		games[gameKey].changeDefaultTimer(newTimer);
-
-		if (newTimer.isPaused == true)
-		{
-			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
-		}
-
-		else
-		{
-			rw.log(username + " requested a default timer change: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
-		}
-	}
-
-	else if (/^\%DTIMER\s*(\w+)/i.test(input) === true && message.channel.type != "dm")
-	{
-		var gameKey = message.channel.name.replace("_game", "").toLowerCase();
-		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)/i, "$1"));
-
-		try
-		{
-			timerInputCheck(message, member, gameKey);
-		}
-
-		catch (err)
-		{
-			message.reply(err);
-			return;
-		}
-
-		games[gameKey].changeDefaultTimer(newTimer);
-
-		if (newTimer.isPaused == true)
-		{
-			rw.log(message.author.username + " set the default timer to zero (unlimited turn times): " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The default timer has been paused.");
-		}
-
-		else
-		{
-			rw.log(username + " requested a default timer change: " + input);
-			message.reply(mentionRole(games[gameKey].role) + " The default timer has been set to " + newTimer.print() + ".");
-		}
 	}
 
 	else if (/^\%START/i.test(input))
