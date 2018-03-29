@@ -223,7 +223,7 @@ bot.on('message', message =>
 			}
 		}
 
-		else message.channel.send("The following games are **online**:\n" + offlineGames.toBox());
+		else message.channel.send("The following games are **online**:\n" + onlineGames.toBox());
 
 		if (offlineGames.length > 1900)
 		{
