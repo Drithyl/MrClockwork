@@ -1013,7 +1013,15 @@ function deleteSave(t = this)
       fs.unlinkSync(path + "/" + files[i]);
     }
 
-    fs.rmdirSync(path);
+    try
+    {
+      fs.rmdirSync(path);
+    }
+
+    catch(err)
+    {
+      rw.log(err);
+    }
   }, t);
 }
 
