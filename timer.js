@@ -113,6 +113,20 @@ module.exports =
       }
     }
 
+    timer.hours++;
+
+    if (timer.minutes != null && timer.minutes > 60)
+    {
+      timer.hours = (timer.hours || 0) + Math.floor(timer.minutes / 60);
+      timer.minutes = timer.minutes % 60;
+    }
+
+    if (timer.hours != null && timer.hours > 24)
+    {
+      timer.days = (timer.days || 0) + Math.floor(timer.hours / 24);
+      timer.hours = timer.hours % 24;
+    }
+
     if (timer.getTotalSeconds() > 0)
     {
       timer.isPaused = false;
