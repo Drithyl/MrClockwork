@@ -659,7 +659,7 @@ bot.on('message', message =>
 
 	else if (/^\%DTIMER\s*(\w+)\s+(\w+)/i.test(input) === true && message.channel.name.includes("_game") === false && message.channel.type != "dm")
 	{
-		var gameKey = input.replace(/^\%DTIMER\s*(\w+)/i, "$2").trim().toLowerCase();
+		var gameKey = input.replace(/^\%DTIMER\s*(\w+)\s+(\w+)/i, "$2").trim().toLowerCase();
 		var newTimer = timer.createFromInput(input.replace(/^\%DTIMER\s*(\w+)\s+(\w+)/i, "$1"));
 
 		try
