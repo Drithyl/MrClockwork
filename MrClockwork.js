@@ -127,10 +127,72 @@ bot.on("ready", () =>
 //On messages sent to channels
 bot.on('message', message =>
 {
-	//Convert them all to uppercase to ignore capitals or lowercases
+	myGuild.fetchMember(message.author).then(function(result)
+	{
+		processMessage(message, result);
+	});
+});
+
+event.e.on("minute", () =>
+{
+	if (wasInitialized === false)
+	{
+		return;
+	}
+
+	for (inst in games)
+	{
+		if (games[inst].game === "Dom4" || games[inst].game === "Dom5")
+		{
+			games[inst].statusCheck();
+		}
+	}
+});
+
+event.e.on("5 seconds", () =>
+{
+	if (wasInitialized === false)
+	{
+		return;
+	}
+
+	for (inst in games)
+	{
+		if (games[inst].game === "CoE4")
+		{
+			games[inst].statusCheck();
+		}
+	}
+});
+
+event.e.on("hour", () =>
+{
+	if (wasInitialized === false)
+	{
+		return;
+	}
+
+	for (var key in games)
+	{
+		if (games[key].game === "CoE4")
+		{
+			continue;
+		}
+
+		if (games[key].wasStarted === false && games[key].channel == null && games[key].role == null && games[key].currenttimer != null && games[key].currenttimer.turn === 0 && Date.now() - games[key].firstHosted > 3600000)
+		{
+			rw.log("More than an hour has passed and " + games[key].name + " has not started, neither does it have a channel. Cleaning it up.");
+			games[key].deleteDomSave();
+			games[key].deleteSave();
+			delete games[key];
+		}
+	}
+});
+
+function processMessage(message, member)
+{
 	var input = message.content;
 	var username = message.author.username;
-	var member = myGuild.members.get(message.author.id);
 
 	if (message.author.bot === true)
 	{
@@ -1192,63 +1254,7 @@ bot.on('message', message =>
 			}
 		}
 	}
-});
-
-event.e.on("minute", () =>
-{
-	if (wasInitialized === false)
-	{
-		return;
-	}
-
-	for (inst in games)
-	{
-		if (games[inst].game === "Dom4" || games[inst].game === "Dom5")
-		{
-			games[inst].statusCheck();
-		}
-	}
-});
-
-event.e.on("5 seconds", () =>
-{
-	if (wasInitialized === false)
-	{
-		return;
-	}
-
-	for (inst in games)
-	{
-		if (games[inst].game === "CoE4")
-		{
-			games[inst].statusCheck();
-		}
-	}
-});
-
-event.e.on("hour", () =>
-{
-	if (wasInitialized === false)
-	{
-		return;
-	}
-
-	for (var key in games)
-	{
-		if (games[key].game === "CoE4")
-		{
-			continue;
-		}
-
-		if (games[key].wasStarted === false && games[key].channel == null && games[key].role == null && games[key].currenttimer != null && games[key].currenttimer.turn === 0 && Date.now() - games[key].firstHosted > 3600000)
-		{
-			rw.log("More than an hour has passed and " + games[key].name + " has not started, neither does it have a channel. Cleaning it up.");
-			games[key].deleteDomSave();
-			games[key].deleteSave();
-			delete games[key];
-		}
-	}
-});
+}
 
 function gamesOnline()
 {
