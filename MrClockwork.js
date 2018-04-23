@@ -1446,9 +1446,14 @@ function loadGame(files, finalCb)
 
 	function reviver(key, value)	//this is a callback!
 	{
-		if (key === "defaulttimer" || key === "currenttimer")
+		if (key === "defaulttimer")
 		{
 			return timer.revive(value);
+		}
+
+		else if (key === "currenttimer")
+		{
+			return timer.reviveCurrent(value);
 		}
 
 		else if (key === "guild")

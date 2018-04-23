@@ -101,7 +101,7 @@ module.exports =
     return obj;
   },
 
-  revive: function(objJSON)
+  reviveCurrent: function(objJSON)
   {
     var timer = this.create();
 
@@ -134,6 +134,26 @@ module.exports =
         timer.days = (timer.days || 0) + Math.floor(timer.hours / 24);
         timer.hours = timer.hours % 24;
       }
+    }
+
+    return timer;
+  },
+
+  revive: function(objJSON)
+  {
+    var timer = this.create();
+
+    for (var key in objJSON)
+    {
+      if (timer[key] != null)
+      {
+        timer[key] = objJSON[key];
+      }
+    }
+
+    if (timer.getTotalSeconds() > 0)
+    {
+      timer.isPaused = false;
     }
 
     return timer;
