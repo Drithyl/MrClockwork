@@ -801,19 +801,10 @@ function sendStales(t = this)
           staleCount++;
         }
 
-        else
+        else if (dump[files[i]].controller == 1) //human controller
         {
-          if (dump[files[i]].controller == 1) //human controller
-          {
-            staleMsg += "- " + dump[files[i]].nationName + "\n";
-            staleCount++;
-          }
-
-          else if (dump[files[i]].controller == 2) //ai
-          {
-            aiMsg += "- " + dump[files[i]].nationName + "\n";
-            aiCount++;
-          }
+          staleMsg += "- " + dump[files[i]].nationName + "\n";
+          staleCount++;
         }
 			}
 

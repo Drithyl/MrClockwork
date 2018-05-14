@@ -76,7 +76,7 @@ var houndsRole;
 var blitzerRole;
 
 var games = {};
-var maxGames = 25;
+var maxGames = 27;
 
 //Will switch to true when the on.ready event first triggers so that certain bits of code don't get re-executed when the bot reconnects and goes through on.ready again
 var wasInitialized = false;
@@ -626,9 +626,6 @@ function processMessage(message, member)
 		}
 
 		else gameKey = message.channel.name.replace("_game", "").toLowerCase();
-
-		console.log(nation);
-		console.log(gameKey);
 
 		if (games[gameKey] == null)
 		{
