@@ -72,6 +72,7 @@ Number.prototype.lowerCap = function(limit)
 
 var owner;
 var myGuild;
+var modRole;
 var houndsRole;
 var blitzerRole;
 
@@ -81,6 +82,8 @@ var maxGames = 27;
 //Will switch to true when the on.ready event first triggers so that certain bits of code don't get re-executed when the bot reconnects and goes through on.ready again
 var wasInitialized = false;
 var didNotReconnect = false;
+var monitoredMembers = [];
+var monitoredMessages = [];
 
 //Stuff starts to happen after the 'ready' event is sent, so code is put here. Kinda like a constructor or main function.
 bot.on("ready", () =>
@@ -116,6 +119,13 @@ bot.on("ready", () =>
 		rw.log("Something went wrong; cannot find the Blitzer role object in this guild.");
 	}
 
+	modRole = myGuild.roles.get(config.modID);
+
+	if (modRole == null)
+	{
+		rw.log("Something went wrong; cannot find the Moderator role object in this guild.");
+	}
+
 	owner.send("I am ready!").catch((err) => {rw.log(err);});
 
 	if (wasInitialized == false)
@@ -147,6 +157,15 @@ event.e.on("minute", () =>
 			games[inst].statusCheck();
 		}
 	}
+
+	monitoredMessages.forEach(function(msg, index)
+	{
+		if (Date.now() - msg.stamp >= 60000)
+		{
+			console.log("message deleted after one minute");
+			monitoredMessages.splice(index, 1);
+		}
+	});
 });
 
 event.e.on("5 seconds", () =>
@@ -189,6 +208,45 @@ event.e.on("hour", () =>
 	}
 });
 
+//only triggers on messages sent after the bot was started
+bot.on("messageDelete", message =>
+{
+	myGuild.fetchMember(message.author).then(function(result)
+	{
+		processDeletedMessage(message, result);
+	});
+});
+
+function processDeletedMessage(message, authorMember)
+{
+	var monitored = monitoredMessages.find(function(msg)
+	{
+		return msg.id === message.id;
+	});
+
+	if (monitored == null)
+	{
+		return;
+	}
+
+	myGuild.fetchAuditLogs({user: monitored.author, type: "MESSAGE_DELETE"}).then(function(audit)
+	{
+		var lastEntry = audit.entries.last();
+
+		//self-deleted messages do not show up in the audit log
+		if (lastEntry == null || lastEntry.executor.id === monitored.author.id)
+		{
+			if (authorMember.highestRole.id === myGuild.id)
+			{
+				myGuild.ban(monitored.author, {reason: "Auto-banned for pinging a user and then deleting the message within a minute. The banned member did not have a role."});
+				owner.send("`" + message.author.username + "` was banned for sending the following mention in the channel `" + message.channel.name + "` and deleted it within a minute:\n\n" + message.content);
+			}
+
+			else owner.send("`" + message.author.username + "` sent the following mention in the channel `" + message.channel.name + "` and deleted it within a minute:\n\n" + message.content);
+		}
+	});
+}
+
 function processMessage(message, member)
 {
 	var input = message.content;
@@ -202,6 +260,60 @@ function processMessage(message, member)
 	if (member == null)
 	{
 		rw.log("Could not find the GuildMember object of user " + username + ". His input was '" + input + "' in channel " + message.channel.name + ".");
+	}
+
+	if (message.mentions.users.size > 0 || message.mentions.roles.size > 0 || message.mentions.everyone === true)
+	{
+		monitoredMessages.push({id: message.id, stamp: message.createdTimestamp, author: message.author});
+	}
+
+	if (monitoredMembers.includes(member.id) === true)
+	{
+		owner.send(username + " sent the following message in the channel " + message.channel.name + ":\n\n" + message.content);
+	}
+
+	if (/^%FOLLOW\s*\d+$/ig.test(input) === true)
+	{
+		var id;
+
+		if (message.author.id !== owner.id)
+		{
+			return;
+		}
+
+		id = input.replace(/^FOLLOW\s*(\d+)$/i, "$1");
+
+		bot.fetchUser(id).then(function(fetchedUser)
+		{
+			if (fetchedUser == null)
+			{
+				owner.send("The id " + id + " is not a registered user.");
+				return;
+			}
+
+			monitoredMembers.push(id);
+		});
+	}
+
+	else if (/^%UNFOLLOW\s*\d+$/ig.test(input) === true)
+	{
+		var id;
+
+		if (message.author.id !== owner.id)
+		{
+			return;
+		}
+
+		id = input.replace(/^FOLLOW\s*(\d+)$/i, "$1");
+
+		if (monitoredMembers.includes(id) === false)
+		{
+			owner.send("The id " + id + " was not being followed.");
+			return;
+		}
+
+		monitoredMembers.splice(monitoredMembers.indexOf(id), 1);
+		owner.send("The id " + id + " has been removed from the list.");
 	}
 
 	//dice roller
