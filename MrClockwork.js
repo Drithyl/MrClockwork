@@ -162,7 +162,6 @@ event.e.on("minute", () =>
 	{
 		if (Date.now() - msg.stamp >= 60000)
 		{
-			console.log("message deleted after one minute");
 			monitoredMessages.splice(index, 1);
 		}
 	});
