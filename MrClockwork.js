@@ -237,8 +237,8 @@ function processDeletedMessage(message, authorMember)
 		{
 			if (authorMember.highestRole.id === myGuild.id)
 			{
+				owner.send("`" + message.author.username + "` is being banned for sending the following mention in the channel `" + message.channel.name + "` and deleted it within a minute:\n\n" + message.content);
 				myGuild.ban(monitored.author, {reason: "Auto-banned for pinging a user and then deleting the message within a minute. The banned member did not have a role."});
-				owner.send("`" + message.author.username + "` was banned for sending the following mention in the channel `" + message.channel.name + "` and deleted it within a minute:\n\n" + message.content);
 			}
 
 			else owner.send("`" + message.author.username + "` sent the following mention in the channel `" + message.channel.name + "` and deleted it within a minute:\n\n" + message.content);
