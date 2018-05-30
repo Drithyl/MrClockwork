@@ -1,5 +1,6 @@
 *.ini
 *.bat
+*.log
 /backups/*
 /games/*
 /bot.log.report
