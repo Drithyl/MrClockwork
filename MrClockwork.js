@@ -158,7 +158,7 @@ bot.on("guildMemberAdd", member =>
 			if (inviteUses[value.code] < value.uses)
 			{
 				inviteUses[value.code] = value.uses;
-				rw.logMemberJoin(member.user.username, value.code);
+				rw.logMemberJoin(member.user.username, value.code, value.inviter.username);
 			}
 		}
 

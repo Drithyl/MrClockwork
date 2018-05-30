@@ -156,11 +156,11 @@ module.exports =
 		});
 	},
 
-	logMemberJoin: function(username, inviteUsed)
+	logMemberJoin: function(username, inviteUsed, inviter)
 	{
 		var d = new Date().toString().replace(" (W. Europe Standard Time)", "");
 		d = d.replace(" (Central European Standard Time)", "");
-		var str = username + " joined the Guild using the invite " + inviteUsed + ".";
+		var str = username + " joined the Guild using the invite " + inviteUsed + ", which was created by " + inviter + ".";
 
 		fs.appendFile("memberJoin.log", d + "\r\n\n-- " + str + "\r\n\n", function (err)
 		{
