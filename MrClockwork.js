@@ -84,6 +84,7 @@ var wasInitialized = false;
 var didNotReconnect = false;
 var monitoredMembers = [];
 var monitoredMessages = [];
+var inviteUses = {};
 
 //Stuff starts to happen after the 'ready' event is sent, so code is put here. Kinda like a constructor or main function.
 bot.on("ready", () =>
@@ -126,12 +127,42 @@ bot.on("ready", () =>
 		rw.log("Something went wrong; cannot find the Moderator role object in this guild.");
 	}
 
+	myGuild.fetchInvites().then(invites =>
+	{
+		for (var [key, value] of invites)
+		{
+			inviteUses[value.code] = value.uses;
+		}
+
+	}).catch(console.error);
+
 	owner.send("I am ready!").catch((err) => {rw.log(err);});
 
 	if (wasInitialized == false)
 	{
 		initialize();
 	}
+});
+
+bot.on("guildMemberAdd", member =>
+{
+	myGuild.fetchInvites().then(invites =>
+	{
+		for (var [key, value] of invites)
+		{
+			if (inviteUses[value.code] == null)
+			{
+				inviteUses[value.code] = 0;
+			}
+
+			if (inviteUses[value.code] < value.uses)
+			{
+				inviteUses[value.code] = value.uses;
+				rw.logMemberJoin(member.user.username, value.code);
+			}
+		}
+
+	}).catch(console.error);
 });
 
 //On messages sent to channels
@@ -313,6 +344,44 @@ function processMessage(message, member)
 
 		monitoredMembers.splice(monitoredMembers.indexOf(id), 1);
 		owner.send("The id " + id + " has been removed from the list.");
+	}
+
+	else if (/^%JOINEDAT$/ig.test(input) === true)
+	{
+		var arr = [];
+		var response = "";
+
+		if (message.author.id !== owner.id || member.highestRole.position < modRole.position)
+		{
+			rw.log(`${username} tried to use the command %joinedAt but does not have enough permissions.`);
+			return;
+		}
+
+		myGuild.fetchMembers().then(function(result)
+		{
+			for (var [key, value] of result.members)
+			{
+				arr.push(value);
+			}
+
+			arr.sort(function (memberA, memberB)
+			{
+				return memberB.joinedAt.getTime() - memberA.joinedAt.getTime();
+			});
+
+			arr.forEach(function(orderedMember, index)
+			{
+				response += (orderedMember.user.username + " ").width(30) + " " + orderedMember.joinedAt + "\n";
+
+				if (index % 15 === 0 && index > 0)
+				{
+					message.author.send(response, {code: true});
+					response = "";
+				}
+			});
+
+			message.author.send(response, {code: true});
+		});
 	}
 
 	//dice roller
@@ -1264,6 +1333,7 @@ function processMessage(message, member)
 			}
 
 			message.author.send(games[gameKey].track());
+			rw.log(username + " tracked the game " + gameKey);
 		}
 
 		else if (/^\%RECORD/i.test(input))
@@ -1289,6 +1359,7 @@ function processMessage(message, member)
 			}
 
 			games[gameKey].record(message);
+			rw.log(username + " recorded the game " + gameKey);
 		}
 
 		else if (/^\%UNTRACK/i.test(input))
@@ -1315,6 +1386,7 @@ function processMessage(message, member)
 
 			games[gameKey].untrack();
 			message.author.send("The game is now no longer tracked. Turn and timer announcements will stop, although you will have to delete the channel and player role manually if you so wish.").catch((err) => {rw.log(err);});
+			rw.log(username + " untracked the game " + gameKey);
 		}
 
 		else if (dom4Host.instances[username] != null)

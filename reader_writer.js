@@ -154,6 +154,21 @@ module.exports =
 				console.log(err);
 			}
 		});
+	},
+
+	logMemberJoin: function(username, inviteUsed)
+	{
+		var d = new Date().toString().replace(" (W. Europe Standard Time)", "");
+		d = d.replace(" (Central European Standard Time)", "");
+		var str = username + " joined the Guild using the invite " + inviteUsed + ".";
+
+		fs.appendFile("memberJoin.log", d + "\r\n\n-- " + str + "\r\n\n", function (err)
+		{
+			if (err)
+			{
+				console.log(err);
+			}
+		});
 	}
 }
 
