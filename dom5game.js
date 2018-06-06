@@ -188,7 +188,12 @@ function printInfo(t = this)
 
   else info += "Not tracked.".width(15);
 
-  info += "Organizer: " + t.organizer.user.username;
+  if (t.organizer == null || t.organizer.user == null)
+  {
+    info += "Organizer: unknown";
+  }
+
+  else info += "Organizer: " + t.organizer.user.username;
 
   return info + "\n";
 }
