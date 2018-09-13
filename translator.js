@@ -125,7 +125,7 @@ module.exports =
     86: "LA Mictlan", 87: "LA T'ien Ch'i", 89: "LA Jomon", 90: "LA Agartha",
     91: "LA Abysia", 92: "LA Caelum", 93: "LA C'tis", 94: "LA Pangaea",
     95: "LA Midgard", 96: "LA Utgard", 97: "LA Bogarus", 98: "LA Patala",
-    99: "LA Gath", 100: "LA Ragha", 101: "LA Xibalba", 36: "EA Atlantis",
+    99: "LA Gath", 100: "LA Ragha", 101: "LA Xibalba", 102: "LA Phlegra", 36: "EA Atlantis",
     37: "EA R'lyeh", 38: "EA Pelagia", 39: "EA Oceania", 73: "MA Atlantis",
     74: "MA R'lyeh", 75: "MA Pelagia", 76: "MA Oceania", 106: "LA Atlantis",
     107: "LA R'lyeh", 108: "LA Erytheia", 40: "EA Therodos", 77: "MA Ys"
@@ -183,6 +183,7 @@ module.exports =
     "mid_ys.2h": "MA Ys",
     "early_mekone.2h": "EA Mekone",
     "mid_phlegra.2h": "MA Phlegra",
+    "late_phlegra.2h": "LA Phlegra",
     "mid_phaeacia.2h": "MA Phaeacia"
   },
 
@@ -206,7 +207,7 @@ module.exports =
     "LA Mictlan": 86, "LA T'ien Ch'i": 87, "LA Jomon": 89, "LA Agartha": 90,
     "LA Abysia": 91, "LA Caelum": 92, "LA C'tis": 93, "LA Pangaea": 94,
     "LA Midgard": 95, "LA Utgard": 96, "LA Bogarus": 97, "LA Patala": 98,
-    "LA Gath": 99, "LA Ragha": 100, "LA Xibalba": 101, "EA Atlantis": 36,
+    "LA Gath": 99, "LA Ragha": 100, "LA Xibalba": 101, "LA Phlegra": 102, "EA Atlantis": 36,
     "EA R'lyeh": 37, "EA Pelagia": 38, "EA Oceania": 39, "MA Atlantis": 73,
     "MA R'lyeh": 74, "MA Pelagia": 75, "MA Oceania": 76, "LA Atlantis": 106,
     "LA R'lyeh": 107, "LA Erytheia": 108, "EA Therodos": 40, "MA Ys": 77
