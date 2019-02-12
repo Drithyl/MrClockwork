@@ -1535,7 +1535,7 @@ function initialize()
 	var files;
 	var subFiles;
 	var path = "games";
-
+	
 	if (fs.existsSync(path) === false)
 	{
 		rw.log("An error occurred when initializing the games. No games directory was found. Could not complete initialization.");
@@ -1692,6 +1692,19 @@ bot.on("disconnect", () =>
 	}
 });
 
+bot.on("guildUnavailable", (guild) =>
+{
+	rw.log(`The guild ${guild.name} is unavailable, probably due to a server outage. Shutting down its games.`);
+
+	for (var name in games)
+	{
+		games[name].kill(function(err)
+		{
+			rw.log(`${name} could not be killed.`);
+		});
+	}
+});
+
 bot.on("reconnecting", () =>
 {
 	rw.log("Trying to reconnect...");
@@ -1712,13 +1725,14 @@ bot.on("warn", warning =>
 	rw.log("WARN: " + warning);
 });
 
-bot.on("error", () =>
+bot.on("error", (err) =>
 {
-	rw.log("An error occurred. This is from the 'on.error' event.");
+	rw.log("An error occurred:");
+	rw.log(err);
 
 	if (owner)
 	{
-		owner.send("Something went wrong! I am dying D':").catch((err) => {rw.log(err);});
+		owner.send(`An error occurred: ${err}`).catch((err) => {rw.log(err);});
 	}
 });
 

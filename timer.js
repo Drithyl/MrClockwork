@@ -162,6 +162,10 @@ module.exports =
   parse: function(data)
   {
     var timer = this.create();
+    var daysRegex = new RegExp("\\d+\\s+days?", "i");
+    var hoursRegex = new RegExp("\\d+\\s+hours?", "i");
+    var minutesRegex = new RegExp("\\d+\\s+minutes?", "i");
+    var secondsRegex = new RegExp("\\d+\\s+seconds?", "i");
     var statusInfo;
     var turn;
     var days;
@@ -177,24 +181,33 @@ module.exports =
     statusInfo = data.slice(data.indexOf("turn"), data.indexOf("</td>", data.indexOf("turn")));
     turn = +statusInfo.match(/\d+/)[0];
 
-    if (statusInfo.indexOf("day") != -1)
+    console.log(`days match ${statusInfo.match(daysRegex)}`);
+    console.log(`hours match ${statusInfo.match(hoursRegex)}`);
+    console.log(`minutes match ${statusInfo.match(minutesRegex)}`);
+    console.log(`seconds match ${statusInfo.match(secondsRegex)}`);
+
+    if (statusInfo.match(daysRegex) != null)
     {
-      days = +statusInfo.slice(statusInfo.indexOf("time"), statusInfo.indexOf("day")).replace(/\D/g, "");
+      days = +statusInfo.match(daysRegex)[0].replace(/\D/g, "");
+      console.log(`days replaced ${days}`);
     }
 
-    if (statusInfo.indexOf("hour") != -1)
+    if (statusInfo.match(hoursRegex) != null)
     {
-      hours = +statusInfo.slice(statusInfo.indexOf("and"), statusInfo.indexOf("hour")).replace(/\D/g, "");
+      hours = +statusInfo.match(hoursRegex)[0].replace(/\D/g, "");
+      console.log(`hours replaced ${hours}`);
     }
 
-    if (statusInfo.indexOf("minute") != -1)
+    if (statusInfo.match(minutesRegex) != null)
     {
-      minutes = +statusInfo.slice(statusInfo.indexOf("time"), statusInfo.indexOf("minute")).replace(/\D/g, "");
+      minutes = +statusInfo.match(minutesRegex)[0].replace(/\D/g, "");
+      console.log(`minutes replaced ${minutes}`);
     }
 
-    if (statusInfo.indexOf("second") != -1)
+    if (statusInfo.match(secondsRegex) != null)
     {
-      seconds = +statusInfo.slice(statusInfo.indexOf("time"), statusInfo.indexOf("second")).replace(/\D/g, "");
+      seconds = +statusInfo.match(secondsRegex)[0].replace(/\D/g, "");
+      console.log(`seconds replaced ${seconds}`);
     }
 
   	if (isNaN(turn) === false)
