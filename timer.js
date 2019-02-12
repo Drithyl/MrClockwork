@@ -181,33 +181,24 @@ module.exports =
     statusInfo = data.slice(data.indexOf("turn"), data.indexOf("</td>", data.indexOf("turn")));
     turn = +statusInfo.match(/\d+/)[0];
 
-    console.log(`days match ${statusInfo.match(daysRegex)}`);
-    console.log(`hours match ${statusInfo.match(hoursRegex)}`);
-    console.log(`minutes match ${statusInfo.match(minutesRegex)}`);
-    console.log(`seconds match ${statusInfo.match(secondsRegex)}`);
-
     if (statusInfo.match(daysRegex) != null)
     {
       days = +statusInfo.match(daysRegex)[0].replace(/\D/g, "");
-      console.log(`days replaced ${days}`);
     }
 
     if (statusInfo.match(hoursRegex) != null)
     {
       hours = +statusInfo.match(hoursRegex)[0].replace(/\D/g, "");
-      console.log(`hours replaced ${hours}`);
     }
 
     if (statusInfo.match(minutesRegex) != null)
     {
       minutes = +statusInfo.match(minutesRegex)[0].replace(/\D/g, "");
-      console.log(`minutes replaced ${minutes}`);
     }
 
     if (statusInfo.match(secondsRegex) != null)
     {
       seconds = +statusInfo.match(secondsRegex)[0].replace(/\D/g, "");
-      console.log(`seconds replaced ${seconds}`);
     }
 
   	if (isNaN(turn) === false)
